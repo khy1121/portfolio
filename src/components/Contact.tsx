@@ -54,7 +54,7 @@ export function Contact() {
         <p className="text-base opacity-70 md:text-lg">{t.title}</p>
         <button
           onClick={copyEmail}
-          className="display mt-4 block break-all text-left text-[clamp(1.7rem,7vw,7rem)] transition-opacity hover:opacity-70"
+          className="display mt-4 block whitespace-nowrap text-left text-[min(6.8vw,6.5rem)] transition-opacity hover:opacity-70"
           data-hover
         >
           {t.email}

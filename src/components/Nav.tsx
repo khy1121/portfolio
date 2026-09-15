@@ -13,9 +13,9 @@ export function Nav() {
         <a href="#top" className="font-display text-sm font-bold tracking-tight" data-hover>
           HY
         </a>
-        <div className="flex items-center gap-5 text-sm md:gap-8">
+        <div className="flex items-center gap-3 text-[13px] sm:gap-5 sm:text-sm md:gap-8">
           <Magnetic><a href="#work" data-hover>{t.work}</a></Magnetic>
-          <Magnetic><a href="#play" data-hover>놀이터</a></Magnetic>
+          <Magnetic><a href="#play" data-hover className="hidden sm:inline">놀이터</a></Magnetic>
           <Magnetic><a href="#about" data-hover>{t.about}</a></Magnetic>
           <Magnetic><a href="#timeline" data-hover className="hidden sm:inline">지나온 길</a></Magnetic>
           <Magnetic><a href="#contact" data-hover>{t.contact}</a></Magnetic>

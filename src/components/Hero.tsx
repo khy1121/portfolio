@@ -148,7 +148,7 @@ export function Hero() {
         </motion.p>
 
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <h1 className="hero-title flex-none whitespace-nowrap text-[clamp(3.6rem,12.5vw,11.5rem)]">
+          <h1 className="hero-title flex-none whitespace-nowrap text-[min(13.5vw,11.5rem)]">
             {lines.map((line, li) => (
               <span key={line} className="block">
                 {line.split("").map((ch, i) => (
