@@ -1,18 +1,46 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
 import { useSite } from "./Providers";
 import { copy, projects, type Project } from "@/lib/content";
 import { ProjectStage } from "./ProjectStage";
 import { ImageTrail } from "./ImageTrail";
 import { RaceSim } from "@/components/fx/RaceSim";
+import { GuardMachine } from "@/components/fx/GuardMachine";
 import { Scramble } from "@/components/fx/Scramble";
 
 function Card({ p, index, total }: { p: Project; index: number; total: number }) {
   const { lang } = useSite();
   const t = copy[lang].work;
   const ref = useRef<HTMLDivElement>(null);
+  const articleRef = useRef<HTMLElement>(null);
+
+  /* 카드가 화면보다 크면 sticky top을 위로(음수까지) 내려서 카드 바닥까지 읽히게 한다.
+     그대로 두면 12vh에 고정된 채 아래가 잘려 스크롤로도 못 본다. */
+  const [stickyTop, setStickyTop] = useState<number | null>(null);
+  useEffect(() => {
+    const el = articleRef.current;
+    if (!el) return;
+    const compute = () => {
+      const base = window.innerHeight * 0.12 + index * 14;
+      const maxTop = window.innerHeight - el.getBoundingClientRect().height - 24;
+      setStickyTop(Math.min(base, maxTop));
+    };
+    let raf = 0;
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(() => { raf = 0; compute(); });
+    };
+    const ro = new ResizeObserver(schedule);
+    ro.observe(el);
+    window.addEventListener("resize", schedule);
+    schedule();
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", schedule);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [index]);
 
   // stack: as the next card arrives, this one shrinks and dims slightly
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 12%", "end 12%"] });
@@ -35,9 +63,10 @@ function Card({ p, index, total }: { p: Project; index: number; total: number })
     <div
       ref={ref}
       className="sticky mb-[6vh]"
-      style={{ top: `calc(12vh + ${index * 14}px)`, zIndex: index + 1 }}
+      style={{ top: stickyTop ?? `calc(12vh + ${index * 14}px)`, zIndex: index + 1 }}
     >
       <motion.article
+        ref={articleRef}
         style={{ scale, rotateX: srx, rotateY: sry, transformPerspective: 1400, transformOrigin: "top center" }}
         onMouseMove={(e) => {
           if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -87,6 +116,7 @@ function Card({ p, index, total }: { p: Project; index: number; total: number })
             </dl>
 
             {p.slug === "omfres" && <RaceSim className="max-w-[520px]" />}
+            {p.slug === "boardingpass" && <GuardMachine />}
 
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div className="flex gap-8">
