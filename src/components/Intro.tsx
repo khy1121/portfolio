@@ -3,7 +3,13 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-const WORDS = ["안녕하세요", "Hello", "김헌영"];
+function greeting(): string {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 11) return "좋은 아침이에요";
+  if (h >= 11 && h < 17) return "안녕하세요";
+  if (h >= 17 && h < 22) return "좋은 저녁이에요";
+  return "늦은 밤이네요";
+}
 const STEP = 380; // ms per word
 const KEY = "intro-seen";
 
@@ -22,6 +28,7 @@ function getShouldPlay() {
 /* 세션당 한 번, 1.1초짜리 인트로 커튼. 끝나면 onDone으로 히어로 지형이 떠오른다. */
 export function Intro({ onDone }: { onDone: () => void }) {
   const shouldPlay = useSyncExternalStore(subscribe, getShouldPlay, () => false);
+  const [words] = useState<string[]>(() => [greeting(), "Hello", "김헌영"]);
   const [idx, setIdx] = useState(0);
   const [open, setOpen] = useState(false);
 
@@ -31,7 +38,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
       return;
     }
     const timers: number[] = [];
-    WORDS.forEach((_, i) => {
+    words.forEach((_, i) => {
       if (i > 0) timers.push(window.setTimeout(() => setIdx(i), STEP * i));
     });
     timers.push(
@@ -41,10 +48,10 @@ export function Intro({ onDone }: { onDone: () => void }) {
           sessionStorage.setItem(KEY, "1");
         } catch {}
         onDone();
-      }, STEP * WORDS.length),
+      }, STEP * words.length),
     );
     return () => timers.forEach(clearTimeout);
-  }, [shouldPlay, onDone]);
+  }, [shouldPlay, onDone, words]);
 
   if (!shouldPlay) return null;
 
@@ -68,7 +75,7 @@ export function Intro({ onDone }: { onDone: () => void }) {
                 exit={{ y: -18, opacity: 0 }}
                 transition={{ duration: 0.22, ease: "easeOut" }}
               >
-                {WORDS[idx]}
+                {words[idx]}
               </motion.span>
             </AnimatePresence>
           </div>

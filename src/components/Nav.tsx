@@ -17,6 +17,7 @@ export function Nav() {
           <Magnetic><a href="#work" data-hover>{t.work}</a></Magnetic>
           <Magnetic><a href="#play" data-hover>놀이터</a></Magnetic>
           <Magnetic><a href="#about" data-hover>{t.about}</a></Magnetic>
+          <Magnetic><a href="#timeline" data-hover className="hidden sm:inline">지나온 길</a></Magnetic>
           <Magnetic><a href="#contact" data-hover>{t.contact}</a></Magnetic>
           <span className="h-4 w-px bg-current opacity-30" aria-hidden />
           <Magnetic>

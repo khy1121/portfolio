@@ -5,6 +5,7 @@ import { motion, useMotionValue, useScroll, useSpring, useTransform } from "fram
 import { useSite } from "./Providers";
 import { copy, projects, type Project } from "@/lib/content";
 import { ProjectStage } from "./ProjectStage";
+import { ImageTrail } from "./ImageTrail";
 
 function Card({ p, index, total }: { p: Project; index: number; total: number }) {
   const { lang } = useSite();
@@ -127,10 +128,12 @@ export function Projects() {
   const t = copy[lang].work;
   return (
     <section id="work" className="mx-auto max-w-[1400px] px-5 pt-28 md:px-10 md:pt-40">
-      <div className="mb-16 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <h2 className="display text-[clamp(2.6rem,6.5vw,5.5rem)]">{t.title}</h2>
-        <p className="max-w-[36ch] text-muted md:text-lg">{t.lead}</p>
-      </div>
+      <ImageTrail className="mb-10 -mx-5 px-5 py-10 md:-mx-10 md:px-10 md:py-16">
+        <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <h2 className="display text-[clamp(2.6rem,6.5vw,5.5rem)]">{t.title}</h2>
+          <p className="max-w-[36ch] text-muted md:text-lg">{t.lead}</p>
+        </div>
+      </ImageTrail>
       <div className="pb-[12vh]">
         {projects.map((p, i) => (
           <Card key={p.slug} p={p} index={i} total={projects.length} />
