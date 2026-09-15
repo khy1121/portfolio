@@ -135,12 +135,16 @@ function Quad({ scrollRef, introRef }: { scrollRef: React.RefObject<number>; int
 export default function TerrainField({
   scrollRef,
   introRef,
+  active = true,
 }: {
   scrollRef: React.RefObject<number>;
   introRef: React.RefObject<number>;
+  /* 히어로가 화면 밖이면 false. 풀스크린 셰이더가 페이지 끝까지 도는 것을 막는다. */
+  active?: boolean;
 }) {
   return (
     <Canvas
+      frameloop={active ? "always" : "never"}
       dpr={[1, 1.5]}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance", premultipliedAlpha: true }}
       style={{ position: "absolute", inset: 0 }}

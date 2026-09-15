@@ -45,3 +45,4 @@ next-env.d.ts
 AGENTS.md
 CLAUDE.md
 public/__measure.html
+.workflows/

@@ -8,7 +8,8 @@
   --line: rgba(230, 237, 235, 0.14);
   --card: #0c181c;
   --particle: 0.79, 0.84, 0.82;
-  --font-display: var(--font-syne), sans-serif;
+  /* Syne는 라틴 서브셋만 로드된다. 한글 제목이 OS 기본 산세로 떨어지지 않도록 Pretendard를 뒤에 둔다. */
+  --font-display: var(--font-syne), "Pretendard Variable", Pretendard, sans-serif;
   --font-body: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
   color-scheme: dark;
 }

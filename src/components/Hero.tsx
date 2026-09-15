@@ -7,6 +7,7 @@ import { useSite } from "./Providers";
 import { copy } from "@/lib/content";
 import { Magnetic } from "./Magnetic";
 import { Intro } from "./Intro";
+import { useInView } from "@/lib/useEnv";
 
 const TerrainField = dynamic(() => import("./TerrainField"), { ssr: false });
 
@@ -59,6 +60,7 @@ export function Hero() {
   const letters = useRef<HTMLSpanElement[]>([]);
   const [started, setStarted] = useState(false);
   const reduced = useSyncExternalStore(subscribeReduced, getReduced, () => false);
+  const heroVisible = useInView(ref, "0px", true);
 
   const onIntroDone = useCallback(() => {
     introRef.current = 1;
@@ -120,7 +122,7 @@ export function Hero() {
 
       <div className="absolute inset-0">
         {!reduced ? (
-          <TerrainField scrollRef={scrollRef} introRef={introRef} />
+          <TerrainField scrollRef={scrollRef} introRef={introRef} active={heroVisible} />
         ) : (
           <div
             className="absolute inset-0"

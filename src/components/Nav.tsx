@@ -3,6 +3,7 @@
 import { useSite } from "./Providers";
 import { copy } from "@/lib/content";
 import { Magnetic } from "./Magnetic";
+import { playThemeWipe } from "@/components/fx/ThemeWipe";
 
 export function Nav() {
   const { theme, toggleTheme, lang } = useSite();
@@ -22,7 +23,13 @@ export function Nav() {
           <span className="h-4 w-px bg-current opacity-30" aria-hidden />
           <Magnetic>
             <button
-              onClick={toggleTheme}
+              onClick={(e) => {
+                const next = theme === "dark" ? "light" : "dark";
+                // 키보드로 누르면 clientX가 0이라 버튼 중심을 쓴다. 와이프를 먼저 걸어야 옛 배경이 덮인다.
+                const r = e.currentTarget.getBoundingClientRect();
+                playThemeWipe(e.clientX || r.left + r.width / 2, e.clientY || r.top + r.height / 2, next);
+                toggleTheme();
+              }}
               aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
               data-hover
               className="relative h-5 w-5"

@@ -259,3 +259,32 @@ export const stack = [
   "GitHub Actions",
   "Claude Code",
 ];
+
+/* ⌘K 한 장 요약·주석 모드가 쓰는 프로필 데이터.
+   전부 이력서·저장소에서 확인된 값만 둔다. */
+export const profile = {
+  name: "김헌영",
+  role: "프론트엔드 개발자",
+  school: "한성대학교 컴퓨터공학부 웹공학트랙",
+  graduation: "2027.02 졸업예정",
+  gpa: "전공 평점 3.94 / 4.5",
+  honor: "3-2 단과대 최우수 장학금",
+  email: "rlagjsdud3@gmail.com",
+  github: "https://github.com/khy1121",
+  resume: "/resume.pdf",
+  looking: "인턴 · 전환형 인턴 · 신입",
+  certs: ["정보처리기사 필기 합격", "SQLD"],
+  highlights: [
+    { k: "배포한 서비스", v: "5개" },
+    { k: "실사용자", v: "교수 3인 · 학생 22명" },
+    { k: "해커톤 FE 커밋", v: "259/345 (75%)" },
+    { k: "테스트", v: "44파일 368개 통과" },
+    { k: "크롤링 카탈로그", v: "2,031행" },
+    { k: "Lighthouse", v: "데스크톱 91 · 모바일 96" },
+  ],
+  principles: [
+    "내가 먼저 쓰는 제품을 만든다",
+    "무엇을 만들지 않을지를 더 오래 고민한다",
+    "초안은 도구, 판단은 사람, 게이트는 CI",
+  ],
+} as const;
