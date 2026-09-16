@@ -200,9 +200,9 @@ function trace(
       const vd = f[r1 + x];
       const ia = va > thr;
       const ib = vb > thr;
-      const ic = vc > thr;
+      const ic2 = vc > thr;
       const id = vd > thr;
-      const st = (ia ? 1 : 0) | (ib ? 2 : 0) | (ic ? 4 : 0) | (id ? 8 : 0);
+      const st = (ia ? 1 : 0) | (ib ? 2 : 0) | (ic2 ? 4 : 0) | (id ? 8 : 0);
       if (st === 0 || st === 15) continue;
 
       const eT = (r0 + x) * 2;
