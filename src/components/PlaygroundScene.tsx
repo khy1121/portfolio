@@ -4,10 +4,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
+import { ASCII_DPR, AsciiPass } from "./fx/AsciiPass";
 
 type Input = { throttle: number; steer: number };
 type CarState = { x: number; z: number; heading: number; speed: number };
 
+const BASE_DPR: [number, number] = [1, 1.5];
 const BOUND = 13;
 const MAX_SPEED = 9;
 const CAR_PUSH_RADIUS = 1.7;
@@ -204,7 +206,7 @@ function ParticlePile({ carRef, count }: { carRef: React.RefObject<CarState>; co
   );
 }
 
-function Signposts({ carRef }: { carRef: React.RefObject<CarState> }) {
+function Signposts({ carRef, ascii }: { carRef: React.RefObject<CarState>; ascii: boolean }) {
   const last = useRef(0);
   const accent = useCssColor("--accent", "#f2b544");
   useFrame((state) => {
@@ -242,6 +244,11 @@ function Signposts({ carRef }: { carRef: React.RefObject<CarState> }) {
                 color: "#071013",
                 whiteSpace: "nowrap",
                 letterSpacing: "-0.02em",
+                /* Html 라벨은 문자 표보다 위에 뜬다. 아스키 모드에서는 뒤의 표지판이 문자로 바뀌어
+                   어두운 글자만 남으므로, 라벨 자체에 accent 칩을 깔아 계속 읽히게 한다. */
+                background: ascii ? accent : undefined,
+                padding: ascii ? "2px 10px" : undefined,
+                borderRadius: ascii ? 6 : undefined,
               }}
             >
               {sg.label}
@@ -297,28 +304,33 @@ export default function PlaygroundScene({
   inputRef,
   active,
   isMobile,
+  ascii,
 }: {
   inputRef: React.RefObject<Input>;
   active: boolean;
   isMobile: boolean;
+  ascii: boolean;
 }) {
   const carRef = useRef<CarState>({ x: 0, z: 5, heading: Math.PI, speed: 0 });
   return (
     <Canvas
       frameloop={active ? "always" : "never"}
       camera={{ position: [0, 4.6, 12.5], fov: 45 }}
-      dpr={[1, 1.5]}
+      dpr={ascii ? ASCII_DPR : BASE_DPR}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       style={{ position: "absolute", inset: 0 }}
     >
       <ambientLight intensity={0.9} />
-      <directionalLight position={[5, 8, 3]} intensity={1.6} />
-      <SceneFog />
+      {/* 아스키에서는 밝기가 곧 문자 밀도라 빛을 조금 올려 면과 면을 갈라 준다. */}
+      <directionalLight position={[5, 8, 3]} intensity={ascii ? 2.1 : 1.6} />
+      {/* 안개는 먼 면의 밝기를 배경색으로 눌러 문자 격자를 뭉갠다. 아스키에서는 끈다. */}
+      {!ascii && <SceneFog />}
       <Ground />
       <ParticlePile carRef={carRef} count={isMobile ? 1200 : 2600} />
-      <Signposts carRef={carRef} />
+      <Signposts carRef={carRef} ascii={ascii} />
       <Car inputRef={inputRef} carRef={carRef} />
       <ChaseCamera carRef={carRef} />
+      {ascii && <AsciiPass />}
     </Canvas>
   );
 }

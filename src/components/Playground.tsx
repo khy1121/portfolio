@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { AsciiToggle, useAsciiMode } from "./fx/AsciiPass";
 
 const PlaygroundScene = dynamic(() => import("./PlaygroundScene"), { ssr: false });
 
@@ -22,6 +23,7 @@ export function Playground() {
   const [focused, setFocused] = useState(false);
   const [stick, setStick] = useState<{ x: number; y: number } | null>(null);
   const isMobile = useSyncExternalStore(subscribeCoarse, getCoarse, () => false);
+  const { ascii, toggle: toggleAscii } = useAsciiMode();
 
   // render only while the section is on screen
   useEffect(() => {
@@ -98,7 +100,7 @@ export function Playground() {
         <h2 className="display text-[clamp(2.6rem,6.5vw,5.5rem)]">놀이터</h2>
         <p className="max-w-[36ch] text-muted md:text-lg">
           {isMobile ? "화면을 누른 채 끌어서 운전하세요." : "방향키나 WASD로 운전하세요."} 파티클 더미를 뚫고 지나가거나,
-          표지판에 부딪히면 그 섹션으로 이동합니다.
+          표지판에 부딪히면 그 섹션으로 이동합니다. 오른쪽 위 ASCII 버튼을 누르면 같은 장면을 문자로 다시 그립니다.
         </p>
       </div>
       <div
@@ -109,7 +111,9 @@ export function Playground() {
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
       >
-        <PlaygroundScene inputRef={input} active={active} isMobile={isMobile} />
+        <PlaygroundScene inputRef={input} active={active} isMobile={isMobile} ascii={ascii} />
+
+        <AsciiToggle ascii={ascii} onToggle={toggleAscii} />
 
         {!focused && !isMobile && (
           <div className="pointer-events-none absolute inset-x-0 bottom-5 flex justify-center">
