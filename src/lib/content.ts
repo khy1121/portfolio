@@ -54,22 +54,22 @@ export const projects: Project[] = [
     kind: "교수 상담 예약 시스템",
     shot: "/shots/omfres.webp",
     period: "2026.09",
-    role: { ko: "개인 · 교수 3인 · 학생 22명 실운영", en: "Solo · in use by 3 professors and 22 students" },
+    role: { ko: "예약·관리자 화면 및 API 개발", en: "Reservation and admin UI · API development" },
     summary: {
-      ko: "표로 관리하던 상담 일정을 예약 앱으로 바꿔 중복과 누락을 시스템이 막게 했다",
-      en: "Replaced a spreadsheet of office-hour slots with an app that blocks double booking",
+      ko: "교수별 상담 규칙에 따라 예약 가능한 시간을 만들고 관리자 화면에서 일정을 관리하는 서비스",
+      en: "A reservation service that generates slots from each professor's rules and manages schedules in an admin UI",
     },
     problem: {
-      ko: "같은 시간에 두 명이 잡히거나 예약이 누락됐다.",
-      en: "Two students landed on the same slot; others were dropped.",
+      ko: "같은 상담 슬롯에 요청이 겹칠 때 중복 요청을 구분해 처리해야 했다.",
+      en: "Concurrent requests for the same office-hour slot needed explicit conflict handling.",
     },
     result: {
-      ko: "Redis SET NX로 슬롯을 선점해 늦은 요청은 409로 거부. 회원가입을 없애 이름만 받는다. 교수 요청은 당일 반영.",
-      en: "Slots are claimed atomically with Redis SET NX and late requests get 409. No sign-up, just a name. Professor requests shipped the same day.",
+      ko: "교수·날짜·시간 키를 Redis SET NX로 선점하고 중복 요청에 HTTP 409를 반환. 관리자 화면에 예약 조회·추가·이동·삭제, 캘린더와 CSV 내보내기를 구현.",
+      en: "Claimed professor/date/time keys with Redis SET NX and returned HTTP 409 for conflicts. Built reservation management, a calendar and CSV export.",
     },
     stats: [
-      { value: "25", label: { ko: "실사용자", en: "real users" } },
-      { value: "16", label: { ko: "Route Handlers", en: "route handlers" } },
+      { value: "409", label: { ko: "중복 요청 응답", en: "conflict response" } },
+      { value: "SET NX", label: { ko: "예약 슬롯 선점", en: "slot claim" } },
     ],
     stack: ["Next.js 16", "TypeScript", "Upstash Redis"],
     repo: "https://github.com/khy1121/omfres",
@@ -82,7 +82,7 @@ export const projects: Project[] = [
     kind: "패션 브랜드 매장 체험 웹",
     shot: "/shots/boardingpass.webp",
     period: "2026.08",
-    role: { ko: "해커톤 · 팀 6인 · FE 총괄 · 커밋 75%", en: "Hackathon · team of 6 · FE lead · 75% of commits" },
+    role: { ko: "해커톤 · 팀 프론트엔드 · 인증·API·회귀테스트 기여", en: "Hackathon · team frontend · auth, APIs and regression tests" },
     summary: {
       ko: "매장 방문을 비행에 비유한 모바일 웹. 회원가입(여권) → 설문 → AI 추천 동선 → 3D 여권 스탬프",
       en: "Mobile web that frames a store visit as a flight: passport sign-up, survey, AI route, 3D passport stamp",
@@ -92,12 +92,12 @@ export const projects: Project[] = [
       en: "Users who dropped mid-signup came back to broken, empty protected screens.",
     },
     result: {
-      ko: "사용자 상태를 셋으로 나눈 ProtectedRoute로 가입 이어하기에 연결. API 31개 중 30개 연동, 368개 테스트 전부 통과.",
-      en: "A three-state ProtectedRoute resumes onboarding instead of crashing. 30 of 31 APIs wired, all 368 tests green.",
+      ko: "ProtectedRoute로 미인증·프로필 미완성·가입 완료를 구분하고 세션 복원과 API 회귀테스트에 기여. 2026.08.20 팀 CI에서 테스트 368개와 빌드 통과.",
+      en: "Separated signed-out, incomplete-profile and completed states in ProtectedRoute, with session recovery and API regression tests. On 2026-08-20, team CI passed 368 tests and the build.",
     },
     stats: [
-      { value: "368", label: { ko: "테스트 통과", en: "tests passing" } },
-      { value: "30/31", label: { ko: "API 연동", en: "APIs wired" } },
+      { value: "368", label: { ko: "팀 CI 테스트 · 26.08.20", en: "team CI tests · 26-08-20" } },
+      { value: "3", label: { ko: "인증 상태 구분", en: "authentication states" } },
     ],
     stack: ["React 19", "React Router 7", "three.js", "Vitest"],
     repo: "https://github.com/Hsu-Likelion-14th-Hackathon/FE",
@@ -110,7 +110,7 @@ export const projects: Project[] = [
     kind: "독서 기록 · 감정 분석",
     shot: "/shots/nadok.webp",
     period: "2026.05 – 08",
-    role: { ko: "팀 · FE 커밋 129/135", en: "Team · 129 of 135 FE commits" },
+    role: { ko: "팀 프론트엔드 · API·세션·모바일 대응", en: "Team frontend · APIs, sessions and mobile UI" },
     summary: {
       ko: "독서 기록과 감정 분석 서비스의 프론트엔드",
       en: "Frontend for a reading-journal and mood-analysis service",
@@ -120,12 +120,12 @@ export const projects: Project[] = [
       en: "On HTTPS every call to the HTTP backend was blocked as mixed content.",
     },
     result: {
-      ko: "Vercel Function 프록시로 우회하고, axios 인스턴스에서 http 주소를 강제 차단해 같은 실수를 코드 단계에서 막았다.",
-      en: "Proxied through Vercel Functions, then hard-blocked http base URLs in the axios instance so the mistake cannot recur.",
+      ko: "Vercel Functions의 동일 출처 프록시와 이미지 URL 정규화를 적용. 회원정보·세션 검사를 공통화하고 모바일 키보드 대응과 PWA 업데이트 안내를 추가.",
+      en: "Added a same-origin Vercel Functions proxy and image URL normalization, shared profile/session checks, mobile keyboard handling and PWA update prompts.",
     },
     stats: [
-      { value: "96%", label: { ko: "FE 커밋 비율", en: "of FE commits" } },
-      { value: "0", label: { ko: "재발", en: "regressions" } },
+      { value: "API", label: { ko: "동일 출처 프록시", en: "same-origin proxy" } },
+      { value: "PWA", label: { ko: "업데이트 안내", en: "update prompts" } },
     ],
     stack: ["React 18", "Vite", "Tiptap", "PWA"],
     repo: "https://github.com/khy1121/bugitone",
@@ -137,7 +137,7 @@ export const projects: Project[] = [
     title: "CropCare AI",
     kind: "농작물 병해충 AI 진단",
     period: "2026.09 –",
-    role: { ko: "팀 5인 · 팀장 · 모델 담당", en: "Team of 5 · lead · model owner" },
+    role: { ko: "팀 5인 · PM·모델 담당 · 초기 웹앱 구현", en: "Team of 5 · PM and model work · initial web app" },
     summary: {
       ko: "사진 한 장으로 농작물 병해충을 진단하고 농약을 추천하는 플랫폼",
       en: "Diagnose crop disease from a photo and recommend treatment",
@@ -147,12 +147,12 @@ export const projects: Project[] = [
       en: "When two diseases score neck and neck, a single answer can pick the wrong pesticide.",
     },
     result: {
-      ko: "ResNet50 파인튜닝 테스트 정확도 93.1%. 접전이면 재촬영을 유도하는 흐름 설계. 전용 분류기는 이득이 없어(76.1 vs 75.0) 채택하지 않음.",
-      en: "Fine-tuned ResNet50 to 93.1% test accuracy. Close calls ask for a second photo. A dedicated classifier gained nothing (76.1 vs 75.0) and was dropped.",
+      ko: "사진 업로드·결과·재촬영·이력 조회를 FastAPI와 연결. ResNet 기반 병해·정상 9개 클래스의 학습·평가 코드를 구현하고 요구사항과 API·DB 명세 초안을 정리.",
+      en: "Connected photo upload, results, retakes and history to FastAPI. Implemented ResNet training and evaluation for 9 classes, and drafted requirements and API/database specifications.",
     },
     stats: [
-      { value: "93.1%", label: { ko: "테스트 정확도", en: "test accuracy" } },
-      { value: "20", label: { ko: "설계 문서", en: "design docs" } },
+      { value: "9", label: { ko: "분류 클래스", en: "classification classes" } },
+      { value: "ResNet", label: { ko: "학습·평가 구현", en: "training and evaluation" } },
     ],
     stack: ["Next.js 15", "FastAPI", "PyTorch"],
     repo: "https://github.com/khy1121/Cropy",
@@ -161,13 +161,13 @@ export const projects: Project[] = [
 ];
 
 export const ticker: { value: string; label: L }[] = [
-  { value: "5", label: { ko: "배포한 서비스", en: "services shipped" } },
-  { value: "25", label: { ko: "실사용자", en: "real users" } },
-  { value: "368", label: { ko: "테스트 통과", en: "tests passing" } },
+  { value: "5", label: { ko: "소개하는 프로젝트", en: "featured projects" } },
+  { value: "409", label: { ko: "예약 중복 요청 응답", en: "reservation conflict response" } },
+  { value: "368", label: { ko: "팀 CI 테스트 · 26.08.20", en: "team CI tests · 26-08-20" } },
   { value: "2,031", label: { ko: "크롤링한 데이터 행", en: "rows crawled" } },
   { value: "96", label: { ko: "Lighthouse 모바일", en: "Lighthouse mobile" } },
-  { value: "75%", label: { ko: "해커톤 FE 커밋", en: "hackathon FE commits" } },
-  { value: "0", label: { ko: "깨진 배포", en: "broken deploys" } },
+  { value: "3", label: { ko: "MCM 인증 상태", en: "MCM authentication states" } },
+  { value: "9", label: { ko: "Cropy 분류 클래스", en: "Cropy classification classes" } },
 ];
 
 export const copy = {
@@ -275,10 +275,10 @@ export const profile = {
   looking: "인턴 · 전환형 인턴 · 신입",
   certs: ["정보처리기사 필기 합격", "SQLD"],
   highlights: [
-    { k: "배포한 서비스", v: "5개" },
-    { k: "실사용자", v: "교수 3인 · 학생 22명" },
-    { k: "해커톤 FE 커밋", v: "259/345 (75%)" },
-    { k: "테스트", v: "44파일 368개 통과" },
+    { k: "소개하는 프로젝트", v: "5개" },
+    { k: "예약 중복 요청 응답", v: "HTTP 409" },
+    { k: "MCM 인증 상태", v: "3가지" },
+    { k: "2026.08.20 팀 CI 테스트", v: "368개 통과" },
     { k: "크롤링 카탈로그", v: "2,031행" },
     { k: "Lighthouse", v: "데스크톱 91 · 모바일 96" },
   ],

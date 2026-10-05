@@ -12,7 +12,7 @@ const syne = Syne({
 export const metadata: Metadata = {
   title: "김헌영 — Frontend Engineer",
   description:
-    "내가 먼저 쓰는 제품을 만들고, 왜 그렇게 만들었는지 설명할 수 있는 코드를 짭니다. Next.js·React 서비스 5개 배포, 실운영 2건.",
+    "내가 먼저 쓰는 제품을 만들고, 왜 그렇게 만들었는지 설명할 수 있는 코드를 짭니다. React·Next.js 프로젝트의 인증·API 연동·실시간 채팅·예약 구현 경험을 소개합니다.",
   openGraph: {
     title: "김헌영 — Frontend Engineer",
     description: "내가 먼저 쓰는 제품을 만드는 프론트엔드 개발자",
