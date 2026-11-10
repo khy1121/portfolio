@@ -5,6 +5,7 @@ import { motion, useMotionValue, useScroll, useSpring, useTransform } from "fram
 import { useSite } from "@/components/Providers";
 import { copy, projects, type Project } from "@/lib/content";
 import { ProjectStage } from "@/components/ProjectStage";
+import { ShotGrid } from "@/components/ShotGrid";
 import { ImageTrail } from "./ImageTrail";
 import { RaceSim } from "@/components/fx/RaceSim";
 import { GuardMachine } from "@/components/fx/GuardMachine";
@@ -168,6 +169,7 @@ export function Projects() {
           <p className="max-w-[36ch] text-muted md:text-lg">문제를 어떻게 찾았고, 무엇을 골랐고, 숫자로 무엇이 남았는지.</p>
         </div>
       </ImageTrail>
+      <ShotGrid className="mb-14" />
       <div className="pb-[12vh]">
         {projects.map((p, i) => (
           <Card key={p.slug} p={p} index={i} total={projects.length} />

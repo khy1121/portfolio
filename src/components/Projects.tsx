@@ -3,6 +3,7 @@
 import { useSite } from "./Providers";
 import { copy, projects, type Project } from "@/lib/content";
 import { ProjectStage } from "./ProjectStage";
+import { ShotGrid } from "./ShotGrid";
 import { RaceSim } from "@/components/fx/RaceSim";
 import { GuardMachine } from "@/components/fx/GuardMachine";
 
@@ -104,6 +105,7 @@ export function Projects() {
         <h2 className="display text-[clamp(2rem,4.5vw,3.2rem)]">{t.title}</h2>
         <p className="max-w-[40ch] text-muted">{t.lead}</p>
       </div>
+      <ShotGrid className="mb-12" />
       <div className="space-y-8">
         {projects.map((p) => (
           <Card key={p.slug} p={p} />
