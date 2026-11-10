@@ -7,6 +7,7 @@ export type Project = {
   title: string;
   kind: string;
   shot?: string;
+  thumb?: string; // 갤러리용 16:10 미리보기
   period: string;
   role: L;
   summary: L;
@@ -22,6 +23,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "omfres",
+    thumb: "/shots/thumbs/omfres.webp",
     title: "상담 예약",
     kind: "교수 상담 예약 시스템",
     shot: "/shots/omfres.webp",
@@ -40,8 +42,8 @@ export const projects: Project[] = [
       en: "Claimed professor/date/time keys with Redis SET NX and returned HTTP 409 for conflicts. Built reservation management, a calendar and CSV export. Three absent students booked without conflicts from the link alone.",
     },
     stats: [
-      { value: "409", label: { ko: "중복 요청 응답", en: "conflict response" } },
       { value: "25", label: { ko: "사용자 · 교수 3 · 학생 22", en: "users · 3 professors, 22 students" } },
+      { value: "409", label: { ko: "중복 요청 응답", en: "conflict response" } },
     ],
     stack: ["Next.js 16", "TypeScript", "Upstash Redis"],
     repo: "https://github.com/khy1121/omfres",
@@ -49,7 +51,35 @@ export const projects: Project[] = [
     accent: "#7FD1B9",
   },
   {
+    slug: "overlap",
+    thumb: "/shots/thumbs/overlap.webp",
+    title: "Overlap",
+    kind: "팀 회의 일정 조율",
+    period: "2026.11",
+    role: { ko: "개인 · 기획·개발·운영", en: "Solo · planning, development and operation" },
+    summary: {
+      ko: "각자 되는 시간을 칠하면 모두가 겹치는 시간을 찾아 제안하는 웹앱",
+      en: "A web app that finds the time everyone shares once each person paints their availability",
+    },
+    problem: {
+      ko: "해커톤 팀 회의를 잡을 때 일정을 등록하고도 서너 번 연락을 주고받아야 했다.",
+      en: "Scheduling a hackathon team meeting still took three or four rounds of messages after entering availability.",
+    },
+    result: {
+      ko: "초대된 약속에 일정을 한 번 입력하면 전원이 되는 시간과 추천 시간을 계산. Supabase Realtime으로 입력을 동기화하고 RLS로 본인 일정만 수정하게 제한. 약 10명이 사용해 회의 5회를 확정.",
+      en: "One entry per person yields the shared and recommended slots. Supabase Realtime syncs input and RLS limits edits to your own schedule. About 10 people used it to settle 5 meetings.",
+    },
+    stats: [
+      { value: "5", label: { ko: "확정한 회의", en: "meetings settled" } },
+      { value: "10", label: { ko: "사용자(약)", en: "users (approx.)" } },
+    ],
+    stack: ["React 18", "Vite", "Supabase", "PWA"],
+    demo: "https://overlap-liard.vercel.app",
+    accent: "#F2B544",
+  },
+  {
     slug: "boardingpass",
+    thumb: "/shots/thumbs/boardingpass.webp",
     title: "MCM Boarding Pass",
     kind: "패션 브랜드 매장 체험 웹",
     shot: "/shots/boardingpass.webp",
@@ -78,6 +108,7 @@ export const projects: Project[] = [
   },
   {
     slug: "nadok",
+    thumb: "/shots/thumbs/nadok.webp",
     title: "NADOK",
     kind: "독서 기록 · 감정 분석",
     shot: "/shots/nadok.webp",
@@ -145,11 +176,14 @@ export const copy = {
     },
     work: {
       title: "만든 것",
-      lead: "문제를 어떻게 찾았고, 무엇을 골랐고, 숫자로 무엇이 남았는지.",
+      lead: "숫자로 남은 결과부터. 문제와 과정은 카드에서 펼쳐 볼 수 있습니다.",
+      gallery: "미리보기를 누르면 해당 프로젝트로 이동합니다.",
       problem: "문제",
       result: "결과",
       repo: "코드",
       demo: "배포",
+      more: "문제와 해결 과정",
+      tryIt: "직접 눌러 볼 수 있는 재현",
     },
     about: {
       title: "일하는 방식",
@@ -182,12 +216,13 @@ export const copy = {
     work: {
       title: "Work",
       lead: "How I found the problem, what I chose, and what the numbers say.",
-      more: "문제와 해결 과정",
-      tryIt: "직접 눌러 볼 수 있는 재현",
+      gallery: "Tap a preview to jump to that project.",
       problem: "Problem",
       result: "Result",
       repo: "Code",
       demo: "Live",
+      more: "Problem and approach",
+      tryIt: "An interactive reproduction",
     },
     about: {
       title: "How I work",
@@ -221,7 +256,5 @@ export const stack = [
   "Upstash Redis",
   "Vercel",
   "GitHub Actions",
-      more: "Problem and approach",
-      tryIt: "An interactive reproduction",
   "Claude Code",
 ];

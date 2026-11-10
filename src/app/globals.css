@@ -36,6 +36,7 @@ html[data-theme="light"] {
   --font-body: var(--font-body);
 }
 
+html { scroll-behavior: smooth; }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
@@ -52,10 +53,6 @@ body {
 @media (pointer: fine) {
   body.has-cursor, body.has-cursor a, body.has-cursor button { cursor: none; }
 }
-
-::selection { background: var(--accent); color: var(--bg); }
-
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
 .marquee-track {
   display: flex;
@@ -81,6 +78,10 @@ body {
   transition: font-variation-settings 0.25s ease, transform 0.25s ease;
 }
 
+::selection { background: var(--accent); color: var(--bg); }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
 .display {
   font-family: var(--font-display);
   font-weight: 700;
@@ -89,6 +90,8 @@ body {
 }
 
 .rule { border-top: 1px solid var(--line); }
+
+details > summary::-webkit-details-marker { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
