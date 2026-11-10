@@ -1,26 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import { motion, type MotionValue, useTransform } from "framer-motion";
+import { motion, type MotionValue, useMotionValue, useTransform } from "framer-motion";
 import type { Project } from "@/lib/content";
 
 /* 프로젝트 성격을 한눈에 보여 주는 모티프. 각 프로젝트의 핵심 동작을 선으로 그렸다. */
 function Motif({ slug, color }: { slug: string; color: string }) {
   const common = { fill: "none", stroke: color, strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
   switch (slug) {
-    case "bookswap": // 두 권의 책이 자리를 바꾼다
+    case "overlap": // 두 사람의 가능한 시간이 겹치는 칸이 켜진다
       return (
         <svg viewBox="0 0 64 64" className="h-full w-full">
-          <motion.g animate={{ x: [0, 18, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
-            <rect x="8" y="20" width="14" height="24" rx="2" {...common} />
-            <line x1="12" y1="26" x2="18" y2="26" {...common} />
-          </motion.g>
-          <motion.g animate={{ x: [0, -18, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
-            <rect x="42" y="20" width="14" height="24" rx="2" {...common} />
-            <line x1="46" y1="26" x2="52" y2="26" {...common} />
-          </motion.g>
-          <path d="M26 14 h12 m-3 -3 l3 3 -3 3" {...common} />
-          <path d="M38 50 h-12 m3 -3 l-3 3 3 3" {...common} />
+          <rect x="8" y="14" width="30" height="30" rx="4" {...common} />
+          <rect x="26" y="22" width="30" height="30" rx="4" {...common} />
+          <motion.rect
+            x="26" y="22" width="12" height="22" rx="2" fill={color}
+            animate={{ opacity: [0.15, 0.9, 0.9, 0.15] }} transition={{ duration: 3, repeat: Infinity, times: [0, 0.25, 0.75, 1] }}
+          />
         </svg>
       );
     case "omfres": // 시간표 슬롯 하나가 채워진다
@@ -116,10 +112,54 @@ function CropyWidget({ color }: { color: string }) {
   );
 }
 
-export function ProjectStage({ p, tiltX, tiltY }: { p: Project; tiltX: MotionValue<number>; tiltY: MotionValue<number> }) {
-  // the phone floats a little against the card's tilt
-  const px = useTransform(tiltY, (v) => v * -2.2);
-  const py = useTransform(tiltX, (v) => v * 2.2);
+/* Overlap은 저장소가 비공개라 핵심 동작(겹치는 시간 추천)을 위젯으로 보여 준다 */
+function OverlapWidget({ color }: { color: string }) {
+  const days = ["월", "화", "수", "목", "금"];
+  // 0 = 아무도 안 됨, 1 = 일부만 됨, 2 = 전원 가능
+  const grid = [
+    [1, 0, 1, 0, 1],
+    [1, 1, 2, 0, 1],
+    [0, 1, 2, 1, 0],
+    [1, 0, 1, 1, 0],
+  ];
+  const hours = ["13", "14", "15", "16"];
+  return (
+    <div className="w-full rounded-2xl border border-line bg-bg/70 p-5 backdrop-blur">
+      <div className="text-xs text-muted">이번 주 · 4명 입력</div>
+      <div className="mt-3 grid grid-cols-[auto_repeat(5,1fr)] gap-1.5 text-center text-xs text-muted">
+        <span />
+        {days.map((d) => (
+          <span key={d}>{d}</span>
+        ))}
+        {grid.map((row, r) => (
+          <div key={hours[r]} className="contents">
+            <span className="pr-1 font-display tabular-nums">{hours[r]}</span>
+            {row.map((v, c) => (
+              <motion.span
+                key={c}
+                className="h-6 rounded-md"
+                style={{ backgroundColor: v === 2 ? color : v === 1 ? `${color}40` : "var(--line)" }}
+                initial={{ opacity: 0, scale: 0.6 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.1 + (r * 5 + c) * 0.03 }}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 rounded-xl px-3 py-2.5 text-sm" style={{ backgroundColor: `${color}22`, color }}>
+        수요일 14시부터 2시간, 모두 가능해요. 이 시간 어때요?
+      </div>
+    </div>
+  );
+}
+
+export function ProjectStage({ p, tiltX, tiltY }: { p: Project; tiltX?: MotionValue<number>; tiltY?: MotionValue<number> }) {
+  // /showcase 카드는 기울기에 맞춰 화면이 살짝 떠다닌다. 기본 페이지는 고정.
+  const zero = useMotionValue(0);
+  const px = useTransform(tiltY ?? zero, (v) => v * -2.2);
+  const py = useTransform(tiltX ?? zero, (v) => v * 2.2);
   return (
     <div
       className="relative flex min-h-[320px] items-end justify-center overflow-hidden rounded-2xl md:min-h-0"
@@ -130,10 +170,7 @@ export function ProjectStage({ p, tiltX, tiltY }: { p: Project; tiltX: MotionVal
       </div>
 
       {p.shot ? (
-        <motion.div
-          style={{ x: px, y: py }}
-          className="relative mt-16 w-[62%] max-w-[250px] translate-y-6 md:mt-20"
-        >
+        <motion.div style={{ x: px, y: py }} className="relative mt-16 w-[62%] max-w-[250px] translate-y-6 md:mt-20">
           <div className="overflow-hidden rounded-[26px] border-[6px] border-[#0b0f12] bg-[#0b0f12] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)]">
             <Image
               src={p.shot}
@@ -147,7 +184,7 @@ export function ProjectStage({ p, tiltX, tiltY }: { p: Project; tiltX: MotionVal
         </motion.div>
       ) : (
         <motion.div style={{ x: px, y: py }} className="relative w-[88%] max-w-[300px] pb-6 pt-24">
-          <CropyWidget color={p.accent} />
+          {p.slug === "overlap" ? <OverlapWidget color={p.accent} /> : <CropyWidget color={p.accent} />}
         </motion.div>
       )}
     </div>

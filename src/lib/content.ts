@@ -14,62 +14,34 @@ export type Project = {
   result: L;
   stats: { value: string; label: L }[];
   stack: string[];
-  repo: string;
+  repo?: string;
   demo?: string;
   accent: string;
 };
 
 export const projects: Project[] = [
   {
-    slug: "bookswap",
-    title: "bookSwap",
-    kind: "교내 중고 교재 거래",
-    shot: "/shots/bookswap.webp",
-    period: "2026.08",
-    role: { ko: "개인 · 46커밋 · 이틀 배포", en: "Solo · 46 commits · shipped in 2 days" },
-    summary: {
-      ko: "과목·교수 기준으로 교재를 찾고 1:1 채팅으로 거래하는 교내 PWA",
-      en: "Campus textbook-swap PWA searchable by course and professor, with 1:1 chat",
-    },
-    problem: {
-      ko: "장터 글 40건 중 72%가 교재 거래인데 과목 기준 검색이 없었다.",
-      en: "72% of 40 marketplace posts were textbooks, yet none were searchable by course.",
-    },
-    result: {
-      ko: "수업계획서를 크롤링해 2,031행 카탈로그를 만들고 Supabase RLS·Realtime으로 이틀 만에 배포. 직렬 조회 3개를 1회로 줄여 Lighthouse 91/96.",
-      en: "Crawled syllabi into a 2,031-row catalog and shipped on Supabase RLS + Realtime in two days. Cut 3 serial queries to 1, Lighthouse 91/96.",
-    },
-    stats: [
-      { value: "2,031", label: { ko: "행 카탈로그", en: "catalog rows" } },
-      { value: "96", label: { ko: "Lighthouse 모바일", en: "Lighthouse mobile" } },
-    ],
-    stack: ["Next.js 16", "Supabase", "Python", "GitHub Actions"],
-    repo: "https://github.com/khy1121/bookSwap",
-    demo: "https://book-swap-virid.vercel.app",
-    accent: "#F2B544",
-  },
-  {
     slug: "omfres",
     title: "상담 예약",
     kind: "교수 상담 예약 시스템",
     shot: "/shots/omfres.webp",
     period: "2026.09",
-    role: { ko: "예약·관리자 화면 및 API 개발", en: "Reservation and admin UI · API development" },
+    role: { ko: "개인 · 기획·개발·운영 · 교수 3인·학생 22명 사용", en: "Solo · built and operated · used by 3 professors and 22 students" },
     summary: {
       ko: "교수별 상담 규칙에 따라 예약 가능한 시간을 만들고 관리자 화면에서 일정을 관리하는 서비스",
       en: "A reservation service that generates slots from each professor's rules and manages schedules in an admin UI",
     },
     problem: {
-      ko: "같은 상담 슬롯에 요청이 겹칠 때 중복 요청을 구분해 처리해야 했다.",
-      en: "Concurrent requests for the same office-hour slot needed explicit conflict handling.",
+      ko: "교수 3인이 학생 22명의 상담 시간을 한 명씩 물어 표로 만들었고, 같은 시간에 요청이 겹치면 구분해 처리해야 했다.",
+      en: "Three professors built the schedule for 22 students by asking one at a time, and concurrent requests for a slot needed explicit conflict handling.",
     },
     result: {
-      ko: "교수·날짜·시간 키를 Redis SET NX로 선점하고 중복 요청에 HTTP 409를 반환. 관리자 화면에 예약 조회·추가·이동·삭제, 캘린더와 CSV 내보내기를 구현.",
-      en: "Claimed professor/date/time keys with Redis SET NX and returned HTTP 409 for conflicts. Built reservation management, a calendar and CSV export.",
+      ko: "교수·날짜·시간 키를 Redis SET NX로 선점하고 중복 요청에 HTTP 409를 반환. 관리자 화면에 예약 조회·추가·이동·삭제, 캘린더와 CSV 내보내기를 구현. 결석했던 학생 3명도 주소만 받고 중복 없이 예약.",
+      en: "Claimed professor/date/time keys with Redis SET NX and returned HTTP 409 for conflicts. Built reservation management, a calendar and CSV export. Three absent students booked without conflicts from the link alone.",
     },
     stats: [
       { value: "409", label: { ko: "중복 요청 응답", en: "conflict response" } },
-      { value: "SET NX", label: { ko: "예약 슬롯 선점", en: "slot claim" } },
+      { value: "25", label: { ko: "사용자 · 교수 3 · 학생 22", en: "users · 3 professors, 22 students" } },
     ],
     stack: ["Next.js 16", "TypeScript", "Upstash Redis"],
     repo: "https://github.com/khy1121/omfres",
@@ -110,7 +82,7 @@ export const projects: Project[] = [
     kind: "독서 기록 · 감정 분석",
     shot: "/shots/nadok.webp",
     period: "2026.05 – 08",
-    role: { ko: "팀 프론트엔드 · API·세션·모바일 대응", en: "Team frontend · APIs, sessions and mobile UI" },
+    role: { ko: "팀 프론트엔드 · 교내 해커톤 대상", en: "Team frontend · campus hackathon grand prize" },
     summary: {
       ko: "독서 기록과 감정 분석 서비스의 프론트엔드",
       en: "Frontend for a reading-journal and mood-analysis service",
@@ -120,12 +92,12 @@ export const projects: Project[] = [
       en: "On HTTPS every call to the HTTP backend was blocked as mixed content.",
     },
     result: {
-      ko: "Vercel Functions의 동일 출처 프록시와 이미지 URL 정규화를 적용. 회원정보·세션 검사를 공통화하고 모바일 키보드 대응과 PWA 업데이트 안내를 추가.",
-      en: "Added a same-origin Vercel Functions proxy and image URL normalization, shared profile/session checks, mobile keyboard handling and PWA update prompts.",
+      ko: "Vercel Functions의 동일 출처 프록시와 이미지 URL 정규화를 적용. 회원정보·세션 검사를 공통화하고 모바일 키보드 대응과 PWA 업데이트 안내를 추가. 8.79MB SVG 배너는 16KB WebP로 교체.",
+      en: "Added a same-origin Vercel Functions proxy and image URL normalization, shared profile/session checks, mobile keyboard handling and PWA update prompts. Replaced an 8.79MB SVG banner with a 16KB WebP.",
     },
     stats: [
-      { value: "API", label: { ko: "동일 출처 프록시", en: "same-origin proxy" } },
-      { value: "PWA", label: { ko: "업데이트 안내", en: "update prompts" } },
+      { value: "99.8%", label: { ko: "배너 용량 감소 · 8.79MB → 16KB", en: "banner size cut · 8.79MB → 16KB" } },
+      { value: "대상", label: { ko: "멋쟁이사자처럼 교내 해커톤", en: "Likelion campus hackathon grand prize" } },
     ],
     stack: ["React 18", "Vite", "Tiptap", "PWA"],
     repo: "https://github.com/khy1121/bugitone",
@@ -137,7 +109,7 @@ export const projects: Project[] = [
     title: "CropCare AI",
     kind: "농작물 병해충 AI 진단",
     period: "2026.09 –",
-    role: { ko: "팀 5인 · PM·모델 담당 · 초기 웹앱 구현", en: "Team of 5 · PM and model work · initial web app" },
+    role: { ko: "산학협력 팀 5인 · 팀장 · 기획·디자인·백엔드·모델", en: "Industry-academic team of 5 · lead · planning, design, backend and model" },
     summary: {
       ko: "사진 한 장으로 농작물 병해충을 진단하고 농약을 추천하는 플랫폼",
       en: "Diagnose crop disease from a photo and recommend treatment",
@@ -152,22 +124,12 @@ export const projects: Project[] = [
     },
     stats: [
       { value: "9", label: { ko: "분류 클래스", en: "classification classes" } },
-      { value: "ResNet", label: { ko: "학습·평가 구현", en: "training and evaluation" } },
+      { value: "48", label: { ko: "병합한 PR", en: "pull requests merged" } },
     ],
     stack: ["Next.js 15", "FastAPI", "PyTorch"],
     repo: "https://github.com/khy1121/Cropy",
     accent: "#9CD36A",
   },
-];
-
-export const ticker: { value: string; label: L }[] = [
-  { value: "5", label: { ko: "소개하는 프로젝트", en: "featured projects" } },
-  { value: "409", label: { ko: "예약 중복 요청 응답", en: "reservation conflict response" } },
-  { value: "368", label: { ko: "팀 CI 테스트 · 26.08.20", en: "team CI tests · 26-08-20" } },
-  { value: "2,031", label: { ko: "크롤링한 데이터 행", en: "rows crawled" } },
-  { value: "96", label: { ko: "Lighthouse 모바일", en: "Lighthouse mobile" } },
-  { value: "3", label: { ko: "MCM 인증 상태", en: "MCM authentication states" } },
-  { value: "9", label: { ko: "Cropy 분류 클래스", en: "Cropy classification classes" } },
 ];
 
 export const copy = {
@@ -204,7 +166,7 @@ export const copy = {
       copied: "복사됨",
       github: "GitHub",
       resume: "이력서",
-      built: "이 사이트는 Next.js, React Three Fiber, Framer Motion으로 만들었습니다.",
+      built: "이 사이트는 Next.js와 Tailwind CSS로 만들었습니다.",
     },
   },
   en: {
@@ -220,6 +182,8 @@ export const copy = {
     work: {
       title: "Work",
       lead: "How I found the problem, what I chose, and what the numbers say.",
+      more: "문제와 해결 과정",
+      tryIt: "직접 눌러 볼 수 있는 재현",
       problem: "Problem",
       result: "Result",
       repo: "Code",
@@ -240,7 +204,7 @@ export const copy = {
       copied: "Copied",
       github: "GitHub",
       resume: "Résumé",
-      built: "Built with Next.js, React Three Fiber and Framer Motion.",
+      built: "Built with Next.js and Tailwind CSS.",
     },
   },
 } as const;
@@ -257,34 +221,7 @@ export const stack = [
   "Upstash Redis",
   "Vercel",
   "GitHub Actions",
+      more: "Problem and approach",
+      tryIt: "An interactive reproduction",
   "Claude Code",
 ];
-
-/* ⌘K 한 장 요약·주석 모드가 쓰는 프로필 데이터.
-   전부 이력서·저장소에서 확인된 값만 둔다. */
-export const profile = {
-  name: "김헌영",
-  role: "프론트엔드 개발자",
-  school: "한성대학교 컴퓨터공학부 웹공학트랙",
-  graduation: "2027.02 졸업예정",
-  gpa: "전공 평점 3.94 / 4.5",
-  honor: "3-2 단과대 최우수 장학금",
-  email: "rlagjsdud3@gmail.com",
-  github: "https://github.com/khy1121",
-  resume: "/resume.pdf",
-  looking: "인턴 · 전환형 인턴 · 신입",
-  certs: ["정보처리기사 필기 합격", "SQLD"],
-  highlights: [
-    { k: "소개하는 프로젝트", v: "5개" },
-    { k: "예약 중복 요청 응답", v: "HTTP 409" },
-    { k: "MCM 인증 상태", v: "3가지" },
-    { k: "2026.08.20 팀 CI 테스트", v: "368개 통과" },
-    { k: "크롤링 카탈로그", v: "2,031행" },
-    { k: "Lighthouse", v: "데스크톱 91 · 모바일 96" },
-  ],
-  principles: [
-    "내가 먼저 쓰는 제품을 만든다",
-    "무엇을 만들지 않을지를 더 오래 고민한다",
-    "초안은 도구, 판단은 사람, 게이트는 CI",
-  ],
-} as const;
