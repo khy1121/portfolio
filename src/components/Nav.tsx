@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useSite } from "./Providers";
 import { copy } from "@/lib/content";
 
@@ -16,6 +17,7 @@ export function Nav() {
           <a href="#work" className="hover:text-accent">{t.work}</a>
           <a href="#about" className="hover:text-accent">{t.about}</a>
           <a href="#contact" className="hover:text-accent">{t.contact}</a>
+          <Link href="/showcase" className="hidden text-muted hover:text-accent sm:inline">인터랙티브 버전</Link>
           <button
             onClick={toggleTheme}
             aria-label={theme === "dark" ? "밝은 테마로 전환" : "어두운 테마로 전환"}
