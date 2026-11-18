@@ -1,19 +1,22 @@
-import { Nav } from "@/components/Nav";
-import { Hero } from "@/components/Hero";
-import { Projects } from "@/components/Projects";
-import { About } from "@/components/About";
-import { Timeline } from "@/components/Timeline";
-import { Contact } from "@/components/Contact";
+import { Sidebar } from "@/components/resume/Sidebar";
+import { About, Contact, Education, Experience, Hero, Projects, Skills } from "@/components/resume/Sections";
 
+/* 이력서형 한 페이지: 왼쪽 고정 메뉴 + Hero → About → Skills → Projects → Experience → Education → Contact */
 export default function Home() {
   return (
-    <main>
-      <Nav />
-      <Hero />
-      <Projects />
-      <About />
-      <Timeline />
-      <Contact />
-    </main>
+    <div className="mx-auto w-full max-w-[1200px] lg:grid lg:grid-cols-[260px_1fr]">
+      <Sidebar />
+      <main className="min-w-0 px-4 sm:px-8 lg:px-16">
+        <div className="max-w-[760px]">
+          <Hero />
+          <About />
+          <Skills />
+          <Projects />
+          <Experience />
+          <Education />
+          <Contact />
+        </div>
+      </main>
+    </div>
   );
 }

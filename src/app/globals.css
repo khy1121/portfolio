@@ -11,6 +11,8 @@
   /* Syne는 라틴 서브셋만 로드된다. 한글 제목이 OS 기본 산세로 떨어지지 않도록 Pretendard를 뒤에 둔다. */
   --font-display: var(--font-syne), "Pretendard Variable", Pretendard, sans-serif;
   --font-body: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
+  /* 라벨·메뉴용 고정폭 글꼴. 한글은 Pretendard로 이어진다. */
+  --font-mono-stack: var(--font-plex-mono), ui-monospace, "Pretendard Variable", Pretendard, monospace;
   color-scheme: dark;
 }
 
@@ -34,6 +36,7 @@ html[data-theme="light"] {
   --color-card: var(--card);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+  --font-mono: var(--font-mono-stack);
 }
 
 html { scroll-behavior: smooth; }

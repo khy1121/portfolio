@@ -4,7 +4,7 @@
 
 | 경로 | 용도 | 성격 |
 |---|---|---|
-| `/` | 채용 담당자가 1분 안에 훑는 화면 | 연출은 첫 화면의 등고선 하나. 숫자 먼저, 과정은 펼쳐서 |
+| `/` | 채용 담당자가 1분 안에 훑는 화면 | 이력서형 한 페이지. 왼쪽 고정 메뉴, 고정폭 라벨, 강조색 하나 |
 | `/showcase` | 구현력을 보여 주는 화면 | 커스텀 커서, 겹쳐 쌓이는 카드, ⌘K 팔레트, 등고선 테마 전환 |
 
 **Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Framer Motion · React Three Fiber · Lenis**
@@ -21,11 +21,16 @@ npx eslint src   # React 19 컴파일러 규칙 포함
 
 ## `/` 구성
 
+이력서를 그대로 옮긴 한 페이지. [congchu/web-porfolio](https://github.com/congchu/web-porfolio)의 왼쪽 고정 메뉴와 타임라인, [RyanFitzgerald/devportfolio](https://github.com/RyanFitzgerald/devportfolio)의 섹션 순서와 미니멀한 표현을 참고했다.
+
 | 구역 | 내용 |
 |---|---|
-| 첫 화면 | 이름·직무·한 줄 소개, 프로젝트 5개 바로가기(숫자 하나씩). 배경은 fbm 높이맵을 `fract`로 잘라 그린 등고선 셰이더 |
-| 프로젝트 | 카드마다 숫자 2개가 먼저 보이고, 문제와 해결 과정은 `<details>`로 펼친다 |
-| 소개 · 지나온 길 · 연락 | 문단 3개와 기술 태그, 이력서 기준 연표 7개, 이메일·GitHub·이력서 PDF |
+| 사이드바 | 이름·직무, 섹션 메뉴(보고 있는 섹션을 `IntersectionObserver`로 표시), GitHub·이메일·이력서 PDF·인터랙티브 버전, 테마 전환. 모바일에서는 상단 바 |
+| Hero · About | 이름·직무·한 줄 소개와 바로가기, 소개 문단 3개 |
+| Skills | 분야별 기술 묶음 |
+| Projects | 썸네일 · 기간 · 역할 · 숫자 · 기술 태그 · Live/Code. 문제와 해결 과정은 `<details>`로 펼친다 |
+| Experience · Education | 기간 / 제목 / 소속 / 성과 목록. 자격·수상 |
+| Contact | 이메일 복사·GitHub·이력서 PDF |
 
 ## 눌러 볼 수 있는 재현
 
@@ -44,7 +49,7 @@ npx eslint src   # React 19 컴파일러 규칙 포함
 
 ## 설계에서 지킨 선
 
-- **`/`의 WebGL 컨텍스트는 1개, `/showcase`는 2개.** 화면 밖으로 나가면 `IntersectionObserver`로 멈춘다.
+- **`/`는 WebGL을 쓰지 않고, `/showcase`는 2개.** 화면 밖으로 나가면 `IntersectionObserver`로 멈춘다.
 - **효과를 꺼도 정보는 100% 남는다.** `prefers-reduced-motion`이면 셰이더를 그리지 않는다. 재현 위젯도 정적 대체본을 렌더한다.
 - **채용 담당자 경로를 가리지 않는다.** 이메일·이력서 PDF·프로젝트 링크·실제 배포 화면 캡처는 어떤 연출로도 흔들지 않는다.
 - **숫자는 확인된 것만.** 사용자 수, 테스트 수, 용량 감소율은 이력서·저장소 기록과 같은 값만 둔다.
@@ -56,13 +61,14 @@ src/
   app/            page.tsx(섹션 조립), globals.css(테마 토큰)
   app/showcase/   /showcase 섹션 조립
   lib/
-    content.ts    프로젝트·문구 데이터 — 내용 수정은 여기만 (두 화면이 공유)
+    content.ts    프로젝트·문구·이력서(resume) 데이터 — 내용 수정은 여기만 (두 화면이 공유)
     showcase-content.ts  숫자 띠와 ⌘K 요약 데이터
     useEnv.ts     모션/포인터/테마/가시성 훅
     glsl.ts       공유 셰이더 조각
     rng.ts        시드 기반 난수(React 컴파일러가 렌더 중 Math.random을 막는다)
   components/
-    Nav, Hero, TerrainField, Projects, ProjectStage, About, Timeline, Contact   — `/`
+    resume/       `/` 전용 (Sidebar, Sections, CopyEmail)
+    TerrainField, ProjectStage, ShotGrid   — `/showcase`가 사용
     fx/           재현 위젯(RaceSim, GuardMachine) — 두 화면이 공유
     showcase/     `/showcase` 전용 컴포넌트와 fx/ 연출 모듈
 ```

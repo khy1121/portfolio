@@ -74,6 +74,7 @@ export const projects: Project[] = [
       { value: "10", label: { ko: "사용자(약)", en: "users (approx.)" } },
     ],
     stack: ["React 18", "Vite", "Supabase", "PWA"],
+    repo: "https://github.com/khy1121/overlap",
     demo: "https://overlap-liard.vercel.app",
     accent: "#F2B544",
   },
@@ -84,7 +85,7 @@ export const projects: Project[] = [
     kind: "패션 브랜드 매장 체험 웹",
     shot: "/shots/boardingpass.webp",
     period: "2026.08",
-    role: { ko: "해커톤 · 팀 프론트엔드 · 인증·API·회귀테스트 기여", en: "Hackathon · team frontend · auth, APIs and regression tests" },
+    role: { ko: "해커톤 팀 6인 · 프론트엔드 총괄(FE 2인) · 커밋 75%", en: "Hackathon team of 6 · frontend lead (2 FE) · 75% of commits" },
     summary: {
       ko: "매장 방문을 비행에 비유한 모바일 웹. 회원가입(여권) → 설문 → AI 추천 동선 → 3D 여권 스탬프",
       en: "Mobile web that frames a store visit as a flight: passport sign-up, survey, AI route, 3D passport stamp",
@@ -243,6 +244,77 @@ export const copy = {
     },
   },
 } as const;
+
+/* 기본 페이지(/)의 이력서형 구성에 쓰는 데이터. 이력서(이력서_catsbi형식.md)와 같은 내용을 유지한다. */
+export const resume = {
+  name: "김헌영",
+  title: "Frontend Developer",
+  tagline: "요청이 실패하거나 연결이 끊겨도 사용 흐름이 이어지도록, 화면 상태와 복구 경로부터 설계합니다.",
+  email: "rlagjsdud3@gmail.com",
+  github: "https://github.com/khy1121",
+  about: [
+    "실제로 쓰이는 서비스를 끝까지 운영하는 신입 프론트엔드 개발자입니다. 직접 만든 상담 예약 사이트를 교수 3명·학생 22명이 쓰고 있고, 운영 중에 받은 요청은 당일 기능으로 반영합니다.",
+    "기능을 만들 때 \"이게 실패하면 사용자는 다음에 무엇을 할 수 있나\"를 먼저 정합니다. 동시 예약 경합, 채팅 전송 실패, 오프라인 진단, 배포 직후 흰 화면처럼 사용자가 막히는 지점을 찾아 복구 경로를 설계해 왔습니다.",
+    "팀에서는 PR 단위로 협업합니다. PR마다 변경 범위, 테스트·빌드 결과, 검증하지 못한 항목을 남깁니다. 코딩 에이전트로 초안을 만들되, 테스트와 린트를 통과한 코드만 직접 읽고 반영합니다.",
+  ],
+  skills: [
+    { group: "언어", items: ["TypeScript", "JavaScript", "Python"] },
+    { group: "프론트엔드", items: ["React", "Next.js (App Router)", "React Router", "Tailwind CSS", "three.js"] },
+    { group: "데이터·API", items: ["REST API", "Route Handlers", "Supabase", "Upstash Redis"] },
+    { group: "오프라인·PWA", items: ["Service Worker", "IndexedDB", "Web Push", "ONNX Runtime Web"] },
+    { group: "테스트·품질", items: ["Vitest", "Testing Library", "Storybook", "Chromatic", "ESLint"] },
+    { group: "배포·협업", items: ["Vercel", "GitHub Actions", "Docker Compose", "Git/GitHub", "Figma"] },
+  ],
+  experience: [
+    {
+      org: "Cropy 산학협력 프로젝트",
+      title: "팀장 · 기획·디자인·백엔드·모델",
+      period: "2026.09 – 진행 중",
+      bullets: [
+        "팀 5인. 첫날 문서 21종과 백엔드·프론트·ML 기본 코드를 올려 팀이 바로 개발을 시작하게 함",
+        "주차별 스프린트와 GitHub 이슈로 작업을 나누고, 팀 저장소에 PR 48건 병합",
+        "통신이 끊겨도 브라우저에서 진단·저장하는 오프라인 기능 구현 (ONNX Runtime Web)",
+      ],
+    },
+    {
+      org: "멋쟁이사자처럼 14기",
+      title: "프론트엔드 트랙",
+      period: "2026.03 – 2026.07",
+      bullets: [
+        "React 교육 과정 수료",
+        "교내 해커톤 대상 (NADOK), 연합 해커톤 프론트엔드 총괄 (MCM Boarding Pass)",
+      ],
+    },
+    {
+      org: "창업동아리",
+      title: "기획 담당",
+      period: "2026",
+      bullets: ["문제 정의, 기능 우선순위 결정, 심사·제출 문서 작성"],
+    },
+  ],
+  education: [
+    {
+      school: "한성대학교",
+      degree: "컴퓨터공학부 웹공학트랙 · 졸업예정",
+      period: "2021.03 – 2027.02",
+      achievements: ["전공 평점 3.94 / 4.5", "단과대 최우수 장학금 (3학년 2학기)"],
+    },
+  ],
+  certificates: [
+    { when: "2026.12", name: "정보처리기사 (취득 예정)" },
+    { when: "2026.09", name: "SQLD" },
+    { when: "2026.05", name: "멋쟁이사자처럼 교내 해커톤 대상" },
+  ],
+};
+
+export const sections = [
+  { id: "about", label: "About" },
+  { id: "skills", label: "Skills" },
+  { id: "projects", label: "Projects" },
+  { id: "experience", label: "Experience" },
+  { id: "education", label: "Education" },
+  { id: "contact", label: "Contact" },
+] as const;
 
 export const stack = [
   "TypeScript",
