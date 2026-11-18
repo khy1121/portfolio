@@ -79,17 +79,17 @@ export const projects: Project[] = [
       en: "Scheduling a hackathon team meeting still took three or four rounds of messages after entering availability.",
     },
     result: {
-      ko: "초대된 약속에 일정을 한 번 입력하면 전원이 되는 시간과 추천 시간을 계산. Supabase Realtime으로 입력을 동기화하고 RLS로 본인 일정만 수정하게 제한. 약 10명이 사용해 회의 5회를 확정.",
-      en: "One entry per person yields the shared and recommended slots. Supabase Realtime syncs input and RLS limits edits to your own schedule. About 10 people used it to settle 5 meetings.",
+      ko: "초대된 약속에 일정을 한 번 입력하면 전원이 되는 시간과 추천 시간을 계산. Supabase Realtime으로 입력을 동기화하고 RLS로 본인 일정만 수정하게 제한. 2주간 17명이 가입해 14명이 일정을 입력했고, 2~7명이 참여한 회의 6건을 확정.",
+      en: "One entry per person yields the shared and recommended slots. Supabase Realtime syncs input and RLS limits edits to your own schedule. In two weeks 17 people signed up, 14 entered availability, and 6 meetings of 2–7 people were settled.",
     },
     cases: [
       { title: "여러 명이 동시에 칠하는 시간표", problem: "각자 시간표를 칠하는 동안 다른 사람 입력이 보이지 않으면 결국 메신저로 다시 확인해야 했다.", solution: "Supabase Realtime으로 입력을 바로 동기화하고, RLS 정책으로 자기 일정만 고칠 수 있게 했다.", result: "전원 가능 시간과 추천 시간을 연속 구간으로 보여 주고, 입력한 사람이 절반이 안 되면 확정 대신 초대부터 권한다." },
       { title: "가입과 초대의 부담", problem: "일정 하나 맞추자고 이메일 가입을 요구하면 팀원이 들어오지 않는다.", solution: "이메일 없이 가입하게 하고, Edge Function이 SHA-256(이름|생년월일)로 내부 식별자를 만든다. 카카오 로그인과 카톡 공유 초대를 붙였다.", result: "생년월일은 저장하지 않는다. Google 캘린더는 free/busy 범위만 요청해 일정 내용은 받지 않는다." },
-      { title: "직접 쓰면서 찾은 버그", problem: "카카오톡 인앱 브라우저·갤럭시 큰 글꼴에서 화면이 옆으로 밀렸고, 새 버전 배포 직후 흰 화면이 떴다.", solution: "뷰포트 폭과 글꼴 확대에 맞춰 레이아웃을 고치고, 배포 직후 MIME text/html로 깨지는 경우를 막았다.", result: "앱을 켜 둔 사이 새 버전이 나오면 새로고침 안내를 띄운다. 약 10명이 써서 회의 5회를 확정했다." },
+      { title: "직접 쓰면서 찾은 버그", problem: "카카오톡 인앱 브라우저·갤럭시 큰 글꼴에서 화면이 옆으로 밀렸고, 새 버전 배포 직후 흰 화면이 떴다.", solution: "뷰포트 폭과 글꼴 확대에 맞춰 레이아웃을 고치고, 배포 직후 MIME text/html로 깨지는 경우를 막았다.", result: "앱을 켜 둔 사이 새 버전이 나오면 새로고침 안내를 띄운다. 2주간 17명이 가입해 14명이 일정을 입력했고, 회의 6건을 확정했다." },
     ],
     stats: [
-      { value: "5", label: { ko: "확정한 회의", en: "meetings settled" } },
-      { value: "10", label: { ko: "사용자(약)", en: "users (approx.)" } },
+      { value: "6", label: { ko: "확정한 회의 · 2~7명", en: "meetings settled · 2–7 people" } },
+      { value: "14", label: { ko: "일정 입력 사용자 · 가입 17", en: "people entered availability · 17 signed up" } },
     ],
     stack: ["React 18", "Vite", "Supabase", "PWA"],
     repo: "https://github.com/khy1121/overlap",
@@ -289,7 +289,7 @@ export const resume = {
   email: "rlagjsdud3@gmail.com",
   github: "https://github.com/khy1121",
   about: [
-    "실제로 쓰이는 서비스를 끝까지 운영하는 신입 프론트엔드 개발자입니다. 직접 만든 상담 예약 사이트를 교수 3명·학생 22명이 쓰고 있고, 운영 중에 받은 요청은 당일 기능으로 반영합니다.",
+    "실제로 쓰이는 서비스를 끝까지 운영하는 신입 프론트엔드 개발자입니다. 팀 회의 일정을 맞추느라 서너 번씩 오가던 연락을 줄이려고 만든 Overlap은 출시 2주 만에 17명이 가입해 14명이 일정을 입력했고, 회의 6건을 확정했습니다. 운영하며 들어온 의견은 바로 기능으로 반영합니다.",
     "기능을 만들 때 \"이게 실패하면 사용자는 다음에 무엇을 할 수 있나\"를 먼저 정합니다. 동시 예약 경합, 채팅 전송 실패, 오프라인 진단, 배포 직후 흰 화면처럼 사용자가 막히는 지점을 찾아 복구 경로를 설계해 왔습니다.",
     "팀에서는 PR 단위로 협업합니다. PR마다 변경 범위, 테스트·빌드 결과, 검증하지 못한 항목을 남깁니다. 코딩 에이전트로 초안을 만들되, 테스트와 린트를 통과한 코드만 직접 읽고 반영합니다.",
   ],

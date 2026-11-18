@@ -7,7 +7,7 @@ export const ticker: { value: string; label: L }[] = [
   { value: "409", label: { ko: "예약 중복 요청 응답", en: "reservation conflict response" } },
   { value: "368", label: { ko: "팀 CI 테스트 · 26.08.20", en: "team CI tests · 26-08-20" } },
   { value: "99.8%", label: { ko: "NADOK 배너 용량 감소", en: "NADOK banner size cut" } },
-  { value: "5", label: { ko: "Overlap으로 확정한 회의", en: "meetings settled with Overlap" } },
+  { value: "6", label: { ko: "Overlap으로 확정한 회의", en: "meetings settled with Overlap" } },
   { value: "48", label: { ko: "Cropy 병합 PR", en: "Cropy pull requests merged" } },
 ];
 
