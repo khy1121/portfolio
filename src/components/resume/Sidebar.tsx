@@ -97,7 +97,7 @@ export function Sidebar() {
               <a href={`mailto:${resume.email}`} className="hover:text-accent">Email ↗</a>
             </li>
             <li>
-              <a href="/resume.pdf" className="hover:text-accent">Résumé PDF ↗</a>
+              <Link href="/resume" className="hover:text-accent">이력서 →</Link>
             </li>
             <li>
               <Link href="/showcase" className="hover:text-accent">인터랙티브 버전 →</Link>

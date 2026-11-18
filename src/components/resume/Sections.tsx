@@ -29,9 +29,9 @@ export function Hero() {
         <a href="#projects" className="rounded bg-accent px-5 py-2.5 text-bg hover:opacity-90">
           프로젝트 보기
         </a>
-        <a href="/resume.pdf" className="rounded border border-line px-5 py-2.5 hover:border-fg">
-          이력서 PDF
-        </a>
+        <Link href="/resume" className="rounded border border-line px-5 py-2.5 hover:border-fg">
+          이력서
+        </Link>
         <a href={resume.github} target="_blank" rel="noreferrer" className="rounded border border-line px-5 py-2.5 hover:border-fg">
           GitHub
         </a>

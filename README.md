@@ -6,6 +6,7 @@
 |---|---|---|
 | `/` | 채용 담당자가 1분 안에 훑는 화면 | 이력서형 한 페이지. 왼쪽 고정 메뉴, 고정폭 라벨, 강조색 하나 |
 | `/projects/[slug]` | 프로젝트 하나에 집중하는 케이스 스터디 | 미리보기 · 상태·기간·팀·역할·기술 · 숫자 → 문제와 해결 과정 3가지 → 재현 위젯 → 이전/다음 |
+| `/resume` | 이력서 (catsbi 이력서 구성) | 소개 → 활동 → 보유 기술 → 학력 → 주요 프로젝트 표 → 프로젝트 기술서. 같은 데이터(content.ts) 사용. 브라우저 인쇄(A4)로 `public/resume.pdf`를 만든다 |
 | `/showcase` | 구현력을 보여 주는 화면 | 커스텀 커서, 겹쳐 쌓이는 카드, ⌘K 팔레트, 등고선 테마 전환 |
 
 **Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Framer Motion · React Three Fiber · Lenis**

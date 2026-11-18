@@ -100,3 +100,11 @@ details > summary::-webkit-details-marker { display: none; }
   .marquee-track { animation: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/* 이력서(/resume) 인쇄: A4, 배경색 유지, 사이트 배경 제거 */
+@media print {
+  @page { size: A4; margin: 14mm 16mm; }
+  :root, html[data-theme] { color-scheme: light !important; --bg: #fff; }
+  html, body { background: #fff !important; color: #14181b; }
+  .resume-root { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
