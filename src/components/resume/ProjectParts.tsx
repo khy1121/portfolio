@@ -3,6 +3,10 @@ import type { ReactNode } from "react";
 import type { Project } from "@/lib/content";
 import { RaceSim } from "@/components/fx/RaceSim";
 import { GuardMachine } from "@/components/fx/GuardMachine";
+import { OverlapSim } from "@/components/fx/OverlapSim";
+import { BbungSim } from "@/components/fx/BbungSim";
+import { NadokSim } from "@/components/fx/NadokSim";
+import { CropySim } from "@/components/fx/CropySim";
 
 /* 홈 카드와 프로젝트 상세 페이지가 함께 쓰는 조각들 */
 
@@ -130,11 +134,70 @@ export function CaseStudies({ p }: { p: Project }) {
   );
 }
 
-/* 직접 눌러 볼 수 있는 재현 위젯이 있는 프로젝트만 */
-export function ProjectSim({ p }: { p: Project }) {
-  if (p.slug === "omfres") return <RaceSim className="max-w-[520px]" />;
-  if (p.slug === "boardingpass") return <GuardMachine />;
-  return null;
-}
+/* 프로젝트마다 문제와 해결 과정 중 하나를 그대로 재현한 위젯과, 따라 누를 순서 */
+const SIMS: Record<string, { caseNo: number; steps: string[]; node: () => ReactNode }> = {
+  overlap: {
+    caseNo: 1,
+    steps: ["왼쪽 '나'의 칸을 눌러 칠해 보세요. 겹치는 시간이 바로 추천됩니다.", "「민지가 일정 바꾸기」를 누르면 추천도 즉시 따라 바뀝니다.", "「실시간 동기화 끄기」를 켜고 다시 바꿔 보세요. 옛 정보로 추천해 버립니다."],
+    node: () => <OverlapSim />,
+  },
+  bbung: {
+    caseNo: 1,
+    steps: ["스위치가 켜진 상태(수정 전)에서 「앱 다시 열기」를 누르세요. 첫 요청 두 개가 401을 받습니다.", "스위치를 끄고(수정 후) 다시 실행하면 첫 요청부터 200입니다."],
+    node: () => <BbungSim />,
+  },
+  nadok: {
+    caseNo: 2,
+    steps: ["「① 새 버전 배포」 → 「② 책 상세로 이동」 순서로 누르세요. 화면이 하얗게 깨집니다.", "스위치를 끄고(수정 후) 같은 순서로 누르면 한 번 새로고침해 새 버전으로 열립니다."],
+    node: () => <NadokSim />,
+  },
+  cropy: {
+    caseNo: 2,
+    steps: ["「애매한 잎 사진」을 고르세요. 수정 전에는 틀린 병해로 단정합니다.", "스위치를 끄면(수정 후) 접전으로 판단해 추가 촬영을 요청하고, 두 사진을 합쳐 맞힙니다."],
+    node: () => <CropySim />,
+  },
+  boardingpass: {
+    caseNo: 1,
+    steps: ["오른쪽 위 「가드 없이」를 켜세요.", "「카카오 로그인」 → 「온보딩 이탈」 순서로 누르면 오른쪽 화면이 빈 데이터로 깨집니다.", "「가드 없이」를 끄면 같은 상황에서 가입 이어하기 화면으로 돌려보냅니다."],
+    node: () => (
+      <div className="flex justify-center md:[zoom:1.45]">
+        <GuardMachine />
+      </div>
+    ),
+  },
+  omfres: {
+    caseNo: 1,
+    steps: ["「8명이 동시에 예약」을 누르세요. SET NX가 켜져 있으면 한 명만 성공하고 나머지는 409입니다.", "「SET NX 끄기」 후 다시 누르면 같은 자리에 여러 명이 예약됩니다."],
+    node: () => (
+      <div className="flex justify-center md:[zoom:1.25]">
+        <RaceSim className="max-w-[560px]" />
+      </div>
+    ),
+  },
+};
 
-export const hasSim = (p: Project) => p.slug === "omfres" || p.slug === "boardingpass";
+export const hasSim = (p: Project) => p.slug in SIMS;
+
+export function SimSection({ p }: { p: Project }) {
+  const s = SIMS[p.slug];
+  if (!s) return null;
+  return (
+    <div className="space-y-6">
+      <div className="rounded-xl border border-line p-5">
+        <p className="text-sm">
+          <span className="font-mono mr-2 text-accent">{String(s.caseNo).padStart(2, "0")}</span>
+          <b>{p.cases[s.caseNo - 1]?.title}</b>를 그대로 재현했습니다. 이렇게 눌러 보세요.
+        </p>
+        <ol className="mt-3 space-y-1.5 text-sm text-muted">
+          {s.steps.map((t, i) => (
+            <li key={t} className="grid grid-cols-[1.5rem_1fr]">
+              <span className="font-mono text-accent">{i + 1}.</span>
+              <span>{t}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      {s.node()}
+    </div>
+  );
+}

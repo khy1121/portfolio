@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { projects } from "@/lib/content";
 import { ThemeButton } from "@/components/resume/Sidebar";
-import { CaseStudies, ExternalLinks, PhonePreview, ProjectSim, StatusBadge, Stats, Tag, hasSim } from "@/components/resume/ProjectParts";
+import { CaseStudies, ExternalLinks, PhonePreview, SimSection, StatusBadge, Stats, Tag, hasSim } from "@/components/resume/ProjectParts";
 
 /* 프로젝트 상세(케이스 스터디). 홈에서는 요약만 보여 주고, 문제와 해결 과정은 여기서 한 프로젝트씩 읽는다 */
 
@@ -90,11 +90,10 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
 
         {hasSim(p) && (
           <section className="border-t border-line py-12 md:py-16">
-            <h2 className="font-mono mb-3 text-sm font-semibold uppercase tracking-widest">
+            <h2 className="font-mono mb-6 text-sm font-semibold uppercase tracking-widest">
               <span className="text-accent">02.</span> 직접 눌러 보기
             </h2>
-            <p className="mb-6 text-sm text-muted">위 문제 중 하나를 그대로 재현했습니다. 스위치를 바꿔 차이를 확인해 보세요.</p>
-            <ProjectSim p={p} />
+            <SimSection p={p} />
           </section>
         )}
 
