@@ -97,6 +97,39 @@ export const projects: Project[] = [
     accent: "#F2B544",
   },
   {
+    slug: "bbung",
+    preview: { src: "/previews/bbung.webp", poster: "/previews/bbung-poster.webp", note: "배포 사이트 녹화 · 경로 지도는 가림" },
+    title: "붕붕어스",
+    kind: "커플 드라이브 기록 웹앱",
+    period: "2026.10 – 11",
+    role: { ko: "4호선톤 해커톤 · 프론트엔드 2인 · 커밋 83% · PR 80/108", en: "Line 4 hackathon · 2 frontend devs · 83% of commits · 80 of 108 PRs" },
+    summary: {
+      ko: "연인과 함께한 드라이브를 기록하고, 테마별 장소 추천과 기록 지도로 다시 떠날 곳을 찾는 모바일 웹앱",
+      en: "A mobile web app for couples to record drives, discover places by theme and revisit them on a map",
+    },
+    problem: {
+      ko: "앱을 다시 열면 첫 요청들이 토큰 없이 나가 401을 받았고, 준비만 하고 나간 드라이브가 커플 연결 해제를 막았다.",
+      en: "On reopen, the first requests went out without a token and got 401, and abandoned drafts blocked disconnecting a couple.",
+    },
+    result: {
+      ko: "초기화 단계에서 저장된 토큰을 미리 싣고, 연결 해제를 막는 드라이브를 시트에서 정리하게 했다. Storybook·Chromatic으로 PR마다 화면 변경을 비교하고 테스트 파일 130개를 유지.",
+      en: "Primed the stored token at startup and let users clear a blocking drive from the sheet. Compared UI changes per PR with Storybook and Chromatic, with 130 test files.",
+    },
+    cases: [
+      { title: "앱을 열자마자 401이 나던 첫 요청", problem: "로그인한 사용자가 앱을 다시 열면 홈·진행 중 드라이브 조회가 토큰 없이 나가 401을 받았다. React는 자식 화면의 effect를 App의 세션 복구보다 먼저 실행하기 때문이었다.", solution: "인증 상태를 정하는 초기화 단계에서 저장된 토큰을 읽어 API 클라이언트에 바로 실어 두도록 바꿨다(loadStoredSession).", result: "첫 요청부터 토큰이 실려 나가고, 같은 상황을 재현하는 토큰 갱신 테스트를 추가했다." },
+      { title: "준비만 하고 나간 드라이브가 연결 해제를 막음", problem: "경로 설정 중에 나가면 '준비 중' 드라이브가 남아 커플 연결 해제가 ACTIVE_DRIVE_EXISTS로 막혔는데, 드라이브 화면에는 준비 중인 드라이브를 끝낼 버튼이 없었다.", solution: "연결 해제 실패 원인을 구분해, 준비 중이면 시트에서 바로 취소하고 이미 출발한 드라이브는 드라이브 화면으로 보내 마치게 했다. 홈 배너도 '준비 중인 드라이브'를 따로 알린다.", result: "사용자가 스스로 빠져나올 수 있는 경로를 만들었고, 세 가지 결과(취소·이동·없음)를 테스트와 Storybook 스토리로 남겼다." },
+      { title: "시트가 열릴 때 화면 전체가 들썩임", problem: "바텀시트·팝업이 올라올 때 화면 전체가 위아래로 튀었다.", solution: "원인은 접근성을 위해 시트로 포커스를 옮길 때 브라우저가 해당 요소로 스크롤한 것이었다. 포커스 이동은 유지하고 focus({ preventScroll: true })로 스크롤만 막았다.", result: "키보드·스크린리더 사용자의 포커스 흐름은 그대로 두고 흔들림을 없앴으며, 회귀 테스트를 추가했다." },
+    ],
+    stats: [
+      { value: "83%", label: { ko: "커밋 410/496", en: "commits 410/496" } },
+      { value: "130", label: { ko: "테스트 파일", en: "test files" } },
+    ],
+    stack: ["React 19", "TypeScript", "Vite", "Storybook", "Chromatic"],
+    repo: "https://github.com/2026-line4thon-team6/2026-line4thon-team6-FE",
+    demo: "https://2026-line4thon-team6-fe.vercel.app/",
+    accent: "#F2867A",
+  },
+  {
     slug: "boardingpass",
     preview: { src: "/previews/boardingpass.webp", poster: "/previews/boardingpass-poster.webp", note: "백엔드 종료 후 목 데이터 모드로 녹화" },
     thumb: "/shots/thumbs/boardingpass.webp",
