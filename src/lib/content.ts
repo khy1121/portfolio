@@ -169,7 +169,7 @@ export const projects: Project[] = [
   {
     slug: "cropy",
     preview: { src: "/previews/cropy.webp", poster: "/previews/cropy-poster.webp", note: "배포 사이트 녹화 · 인터넷 없이 기기에서 진단" },
-    title: "CropCare AI",
+    title: "Cropy",
     kind: "농작물 병해충 AI 진단",
     period: "2026.09 –",
     role: { ko: "산학협력 팀 5인 · 팀장 · 기획·디자인·백엔드·모델", en: "Industry-academic team of 5 · lead · planning, design, backend and model" },
@@ -196,6 +196,7 @@ export const projects: Project[] = [
     ],
     stack: ["Next.js 15", "FastAPI", "PyTorch"],
     repo: "https://github.com/khy1121/Cropy",
+    demo: "https://43.202.14.204.sslip.io/",
     accent: "#9CD36A",
   },
 ];

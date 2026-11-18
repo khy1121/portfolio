@@ -12,7 +12,7 @@ const events: { when: string; title: string; detail: string; tag?: string }[] = 
   { when: "2026.05 – 08", title: "NADOK 독서 기록·감정 분석", detail: "Mixed Content 대응 프록시와 이미지 URL 정규화, 공통 세션 검사와 모바일 키보드 대응", tag: "팀" },
   { when: "2026.08", title: "MCM Boarding Pass 해커톤 · 팀 프론트엔드", detail: "가입 상태 복원·API 통합·회귀테스트 기여. 2026.08.20 팀 CI에서 테스트 368개와 빌드 통과", tag: "해커톤" },
   { when: "2026.08", title: "bookSwap 교재 거래 PWA", detail: "이틀 46커밋. 2,031행 카탈로그, Supabase RLS·Realtime, Lighthouse 91/96", tag: "개인" },
-  { when: "2026.09", title: "상담 예약 서비스 · CropCare AI PM·모델 담당 · 정보처리기사 필기 · SQLD", detail: "Redis SET NX 슬롯 선점과 관리자 화면 구현. 작물 진단 웹앱 API 연결과 ResNet 기반 9종 분류 학습·평가 코드 구현", tag: "개발 · 팀 · 자격" },
+  { when: "2026.09", title: "상담 예약 서비스 · Cropy PM·모델 담당 · 정보처리기사 필기 · SQLD", detail: "Redis SET NX 슬롯 선점과 관리자 화면 구현. 작물 진단 웹앱 API 연결과 ResNet 기반 9종 분류 학습·평가 코드 구현", tag: "개발 · 팀 · 자격" },
   { when: "2027.02", title: "졸업 예정", detail: "그 전까지 인턴·전환형 인턴으로 실서비스 지표를 다루는 팀에서 일하는 것이 목표", tag: "다음" },
 ];
 
