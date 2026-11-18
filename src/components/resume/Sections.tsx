@@ -84,6 +84,27 @@ function ProjectCard({ p }: { p: Project }) {
   return (
     <article id={p.slug} className="scroll-mt-28 lg:scroll-mt-8">
       <div className="grid gap-5 sm:grid-cols-[180px_1fr]">
+        {p.preview ? (
+          <figure className="mx-auto w-[58%] max-w-[220px] sm:w-full">
+            <div className="relative aspect-[390/844] overflow-hidden rounded-2xl border border-line bg-card shadow-sm">
+              {/* 애니메이션 WebP는 next/image 최적화를 거치면 정지 화면이 되므로 img를 직접 쓴다.
+                  모션 줄이기 설정이면 정지 프레임을 보여 준다. */}
+              <picture>
+                <source media="(prefers-reduced-motion: reduce)" srcSet={p.preview.poster} />
+                <img
+                  src={p.preview.src}
+                  alt={`${p.title} 동작 화면 녹화`}
+                  width={390}
+                  height={844}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover object-top"
+                />
+              </picture>
+            </div>
+            {p.preview.note && <figcaption className="font-mono mt-2 text-center text-[11px] leading-snug text-muted">{p.preview.note}</figcaption>}
+          </figure>
+        ) : (
         <div className="relative aspect-[16/10] overflow-hidden rounded border border-line bg-card">
           {p.thumb ? (
             <Image src={p.thumb} alt={`${p.title} 화면`} fill sizes="(min-width: 640px) 180px, 100vw" className="object-cover object-top" />
@@ -93,6 +114,7 @@ function ProjectCard({ p }: { p: Project }) {
             </div>
           )}
         </div>
+        )}
 
         <div>
           <p className="font-mono text-xs text-muted">{p.period}</p>

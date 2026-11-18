@@ -10,6 +10,8 @@ export type Project = {
   kind: string;
   shot?: string;
   thumb?: string; // 갤러리용 16:10 미리보기
+  /* 배포 화면을 녹화한 동작 미리보기(애니메이션 WebP)와 정지 프레임. note는 녹화 조건 */
+  preview?: { src: string; poster: string; note?: string };
   period: string;
   role: L;
   summary: L;
@@ -27,6 +29,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "omfres",
+    preview: { src: "/previews/omfres.webp", poster: "/previews/omfres-poster.webp", note: "배포 사이트 녹화 · 예약 제출 전까지" },
     thumb: "/shots/thumbs/omfres.webp",
     title: "상담 예약",
     kind: "교수 상담 예약 시스템",
@@ -61,6 +64,7 @@ export const projects: Project[] = [
   },
   {
     slug: "overlap",
+    preview: { src: "/previews/overlap.webp", poster: "/previews/overlap-poster.webp", note: "배포 사이트 녹화 · 본인 테스트 약속" },
     thumb: "/shots/thumbs/overlap.webp",
     title: "Overlap",
     kind: "팀 회의 일정 조율",
@@ -94,6 +98,7 @@ export const projects: Project[] = [
   },
   {
     slug: "boardingpass",
+    preview: { src: "/previews/boardingpass.webp", poster: "/previews/boardingpass-poster.webp", note: "백엔드 종료 후 목 데이터 모드로 녹화" },
     thumb: "/shots/thumbs/boardingpass.webp",
     title: "MCM Boarding Pass",
     kind: "패션 브랜드 매장 체험 웹",
@@ -128,6 +133,7 @@ export const projects: Project[] = [
   },
   {
     slug: "nadok",
+    preview: { src: "/previews/nadok.webp", poster: "/previews/nadok-poster.webp", note: "백엔드 종료 후 목 데이터 모드로 녹화" },
     thumb: "/shots/thumbs/nadok.webp",
     title: "NADOK",
     kind: "독서 기록 · 감정 분석",
@@ -162,6 +168,7 @@ export const projects: Project[] = [
   },
   {
     slug: "cropy",
+    preview: { src: "/previews/cropy.webp", poster: "/previews/cropy-poster.webp", note: "배포 사이트 녹화 · 인터넷 없이 기기에서 진단" },
     title: "CropCare AI",
     kind: "농작물 병해충 AI 진단",
     period: "2026.09 –",

@@ -28,7 +28,7 @@ npx eslint src   # React 19 컴파일러 규칙 포함
 | 사이드바 | 이름·직무, 섹션 메뉴(보고 있는 섹션을 `IntersectionObserver`로 표시), GitHub·이메일·이력서 PDF·인터랙티브 버전, 테마 전환. 모바일에서는 상단 바 |
 | Hero · About | 이름·직무·한 줄 소개와 바로가기, 소개 문단 3개 |
 | Skills | 분야별 기술 묶음 |
-| Projects | 썸네일 · 기간 · 역할 · 숫자 · 기술 태그 · Live/Code. 문제와 해결 과정은 `<details>`로 펼친다 |
+| Projects | 배포 화면 녹화 미리보기(애니메이션 WebP, `public/previews/`) · 기간 · 역할 · 숫자 · 기술 태그 · Live/Code. 문제와 해결 과정 3가지는 `<details>`로 펼친다. 모션 줄이기 설정이면 정지 프레임 |
 | Experience · Education | 기간 / 제목 / 소속 / 성과 목록. 자격·수상 |
 | Contact | 이메일 복사·GitHub·이력서 PDF |
 
