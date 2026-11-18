@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { projects, resume, sections, type Project } from "@/lib/content";
+import { skillGroups, type Skill } from "@/lib/skills";
 import { CopyEmail } from "./CopyEmail";
 import { ExternalLinks, PhonePreview, StatusBadge, Stats, Tag } from "./ProjectParts";
 
@@ -51,19 +52,42 @@ export function About() {
   );
 }
 
+/* 배경색 밝기에 따라 글자·로고를 흰색/검정으로 고른다 */
+function onColor(hex: string) {
+  const n = parseInt(hex, 16);
+  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  return 0.299 * r + 0.587 * g + 0.114 * b > 160 ? "#111" : "#fff";
+}
+
+function SkillBadge({ s }: { s: Skill }) {
+  const hex = s.color ?? s.icon?.hex ?? "4A4F55";
+  const fg = onColor(hex);
+  return (
+    <li
+      className="font-mono inline-flex items-center gap-1.5 rounded-[4px] px-2.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider ring-1 ring-inset ring-white/10"
+      style={{ backgroundColor: `#${hex}`, color: fg }}
+    >
+      {s.icon && (
+        <svg role="img" viewBox="0 0 24 24" className="h-3.5 w-3.5 shrink-0" fill={fg} aria-hidden>
+          <path d={s.icon.path} />
+        </svg>
+      )}
+      {s.name}
+    </li>
+  );
+}
+
 export function Skills() {
   return (
     <Section id="skills">
       <dl className="grid gap-x-8 gap-y-6 sm:grid-cols-[9rem_1fr]">
-        {resume.skills.map((g) => (
+        {skillGroups.map((g) => (
           <div key={g.group} className="contents">
-            <dt className="font-mono pt-0.5 text-sm text-muted">{g.group}</dt>
+            <dt className="font-mono pt-1.5 text-sm text-muted">{g.group}</dt>
             <dd>
               <ul className="flex flex-wrap gap-2">
                 {g.items.map((s) => (
-                  <li key={s} className="rounded bg-card px-2.5 py-1 text-sm">
-                    {s}
-                  </li>
+                  <SkillBadge key={s.name} s={s} />
                 ))}
               </ul>
             </dd>

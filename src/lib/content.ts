@@ -347,14 +347,6 @@ export const resume = {
     "기능을 만들 때 \"이게 실패하면 사용자는 다음에 무엇을 할 수 있나\"를 먼저 정합니다. 동시 예약 경합, 채팅 전송 실패, 오프라인 진단, 배포 직후 흰 화면처럼 사용자가 막히는 지점을 찾아 복구 경로를 설계해 왔습니다.",
     "팀에서는 PR 단위로 협업합니다. PR마다 변경 범위, 테스트·빌드 결과, 검증하지 못한 항목을 남깁니다. 코딩 에이전트로 초안을 만들되, 테스트와 린트를 통과한 코드만 직접 읽고 반영합니다.",
   ],
-  skills: [
-    { group: "언어", items: ["TypeScript", "JavaScript", "Python"] },
-    { group: "프론트엔드", items: ["React", "Next.js (App Router)", "React Router", "Tailwind CSS", "three.js"] },
-    { group: "데이터·API", items: ["REST API", "Route Handlers", "Supabase", "Upstash Redis"] },
-    { group: "오프라인·PWA", items: ["Service Worker", "IndexedDB", "Web Push", "ONNX Runtime Web"] },
-    { group: "테스트·품질", items: ["Vitest", "Testing Library", "Storybook", "Chromatic", "ESLint"] },
-    { group: "배포·협업", items: ["Vercel", "GitHub Actions", "Docker Compose", "Git/GitHub", "Figma"] },
-  ],
   experience: [
     {
       org: "Cropy 산학협력 프로젝트",
