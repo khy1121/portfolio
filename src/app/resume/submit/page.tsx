@@ -147,13 +147,17 @@ export default function SubmitResumePage() {
 
         <div className="mt-6">
           <H2>About Me.</H2>
-          <div className="space-y-1.5 text-[11.5px] leading-[1.65]">
+          {/* 증명사진은 공개 페이지에 두지 않는다. 제출용 PDF를 만들 때만 이 자리에 넣고 hidden을 푼다 */}
+          <div className="flex items-start gap-4">
+            <div id="photo-slot" className="hidden h-[31mm] w-[24mm] shrink-0 overflow-hidden rounded-[3px] border" style={{ borderColor: C.line }} />
+            <div className="min-w-0 flex-1 space-y-1.5 text-[11.5px] leading-[1.65]">
             <p>
               <b>실제로 쓰이는 서비스를 끝까지 운영하는 프론트엔드 개발자</b> 김헌영입니다. 직접 만든 일정 조율 웹앱 Overlap은 출시 2주 만에 17명이 가입해 회의 6건을 확정했고,
               운영하며 들어온 의견은 바로 기능으로 반영합니다.
             </p>
             <p>기능을 만들 때 &ldquo;이게 실패하면 사용자는 다음에 무엇을 할 수 있나&rdquo;를 먼저 정하고, 사용자가 막히는 지점마다 복구 경로를 설계해 왔습니다.</p>
             <p>PR마다 변경 범위와 테스트·빌드 결과, 검증하지 못한 항목을 남기며 팀과 같은 방식으로 일하는 것을 중요하게 생각합니다.</p>
+          </div>
           </div>
 
           <H2>Tool &amp; Skill.</H2>
