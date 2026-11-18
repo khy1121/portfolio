@@ -24,7 +24,7 @@ function useActiveSection() {
   return active;
 }
 
-function ThemeButton() {
+export function ThemeButton() {
   const { theme, toggleTheme } = useSite();
   return (
     <button

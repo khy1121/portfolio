@@ -1,9 +1,8 @@
-import Image from "next/image";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { projects, resume, sections, type Project } from "@/lib/content";
-import { RaceSim } from "@/components/fx/RaceSim";
-import { GuardMachine } from "@/components/fx/GuardMachine";
 import { CopyEmail } from "./CopyEmail";
+import { ExternalLinks, PhonePreview, StatusBadge, Stats, Tag } from "./ProjectParts";
 
 function Section({ id, children }: { id: (typeof sections)[number]["id"]; children: ReactNode }) {
   const i = sections.findIndex((s) => s.id === id);
@@ -16,10 +15,6 @@ function Section({ id, children }: { id: (typeof sections)[number]["id"]; childr
       {children}
     </section>
   );
-}
-
-function Tag({ children }: { children: ReactNode }) {
-  return <li className="font-mono rounded border border-line px-2 py-0.5 text-xs text-muted">{children}</li>;
 }
 
 export function Hero() {
@@ -79,124 +74,42 @@ export function Skills() {
   );
 }
 
-function ProjectCard({ p }: { p: Project }) {
-  const sim = p.slug === "omfres" ? <RaceSim className="max-w-[520px]" /> : p.slug === "boardingpass" ? <GuardMachine /> : null;
+function FeaturedCard({ p }: { p: Project }) {
   return (
     <article id={p.slug} className="scroll-mt-28 lg:scroll-mt-8">
-      <div className="grid gap-5 sm:grid-cols-[180px_1fr]">
-        {p.preview ? (
-          <figure className="mx-auto w-[58%] max-w-[220px] sm:w-full">
-            <div className="relative aspect-[390/844] overflow-hidden rounded-2xl border border-line bg-card shadow-sm">
-              {/* 애니메이션 WebP는 next/image 최적화를 거치면 정지 화면이 되므로 img를 직접 쓴다.
-                  모션 줄이기 설정이면 정지 프레임을 보여 준다. */}
-              <picture>
-                <source media="(prefers-reduced-motion: reduce)" srcSet={p.preview.poster} />
-                <img
-                  src={p.preview.src}
-                  alt={`${p.title} 동작 화면 녹화`}
-                  width={390}
-                  height={844}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover object-top"
-                />
-              </picture>
-            </div>
-            {p.preview.note && <figcaption className="font-mono mt-2 text-center text-[11px] leading-snug text-muted">{p.preview.note}</figcaption>}
-          </figure>
-        ) : (
-        <div className="relative aspect-[16/10] overflow-hidden rounded border border-line bg-card">
-          {p.thumb ? (
-            <Image src={p.thumb} alt={`${p.title} 화면`} fill sizes="(min-width: 640px) 180px, 100vw" className="object-cover object-top" />
-          ) : (
-            <div className="font-mono flex h-full items-center justify-center p-3 text-center text-xs" style={{ color: p.accent }}>
-              {p.kind}
-            </div>
-          )}
-        </div>
-        )}
-
-        <div>
-          <p className="font-mono text-xs text-muted">{p.period}</p>
-          <h3 className="mt-1 text-xl font-bold">
-            {p.demo ? (
-              <a href={p.demo} target="_blank" rel="noreferrer" className="hover:text-accent">
-                {p.title} <span className="text-sm text-muted">↗</span>
-              </a>
-            ) : (
-              p.title
-            )}
+      <div className="grid gap-6 sm:grid-cols-[200px_1fr] sm:gap-8">
+        <Link href={`/projects/${p.slug}`} className="mx-auto block w-[58%] max-w-[220px] sm:w-full" aria-label={`${p.title} 자세히 보기`}>
+          <PhonePreview p={p} className="transition-transform duration-300 hover:-translate-y-1" />
+        </Link>
+        <div className="flex flex-col">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
+            <StatusBadge status={p.status} />
+            <span className="font-mono">{p.period}</span>
+            <span aria-hidden>·</span>
+            <span>{p.team}</span>
+          </div>
+          <h3 className="mt-3 text-2xl font-bold">
+            <Link href={`/projects/${p.slug}`} className="hover:text-accent">
+              {p.title}
+            </Link>
           </h3>
-          <p className="mt-1 text-sm text-muted">{p.role.ko}</p>
-          <p className="mt-3 leading-relaxed">{p.summary.ko}</p>
-
-          <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
-            {p.stats.map((s) => (
-              <li key={s.value} className="text-sm">
-                <span className="font-mono font-semibold text-accent">{s.value}</span>{" "}
-                <span className="text-muted">{s.label.ko}</span>
-              </li>
-            ))}
-          </ul>
-
-          <ul className="mt-4 flex flex-wrap gap-2">
+          <p className="font-mono mt-1 text-xs" style={{ color: p.accent }}>
+            {p.kind}
+          </p>
+          <p className="mt-4 leading-relaxed">{p.summary.ko}</p>
+          <div className="mt-5">
+            <Stats p={p} large />
+          </div>
+          <ul className="mt-5 flex flex-wrap gap-2">
             {p.stack.map((s) => (
               <Tag key={s}>{s}</Tag>
             ))}
           </ul>
-
-          <details className="group mt-5 rounded border border-line">
-            <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-2.5 text-sm font-semibold">
-              문제와 해결 과정
-              <span className="font-mono text-muted transition-transform group-open:rotate-45" aria-hidden>
-                +
-              </span>
-            </summary>
-            <div className="space-y-6 border-t border-line px-4 py-5 text-sm leading-relaxed">
-              <ol className="space-y-6">
-                {p.cases.map((c, i) => (
-                  <li key={c.title}>
-                    <h4 className="font-semibold">
-                      <span className="font-mono mr-2 text-accent">{String(i + 1).padStart(2, "0")}</span>
-                      {c.title}
-                    </h4>
-                    <dl className="mt-2 space-y-1.5 border-l border-line pl-4">
-                      {(
-                        [
-                          ["문제", c.problem],
-                          ["해결", c.solution],
-                          ["결과", c.result],
-                        ] as const
-                      ).map(([k, v]) => (
-                        <div key={k} className="grid grid-cols-[2.5rem_1fr] gap-2">
-                          <dt className="font-mono text-xs leading-6 text-muted">{k}</dt>
-                          <dd>{v}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </li>
-                ))}
-              </ol>
-              {sim && (
-                <div>
-                  <p className="font-mono mb-3 text-xs text-muted">직접 눌러 볼 수 있는 재현</p>
-                  {sim}
-                </div>
-              )}
-            </div>
-          </details>
-
-          <div className="font-mono mt-4 flex gap-5 text-sm">
-            {p.demo && (
-              <a href={p.demo} target="_blank" rel="noreferrer" className="text-accent hover:underline">
-                Live ↗
-              </a>
-            )}
-            {p.repo && (
-              <a href={p.repo} target="_blank" rel="noreferrer" className="text-accent hover:underline">
-                Code ↗
-              </a>
-            )}
+          <div className="mt-6 flex flex-wrap items-center gap-5">
+            <Link href={`/projects/${p.slug}`} className="rounded bg-accent px-4 py-2 text-sm font-semibold text-bg hover:opacity-90">
+              문제와 해결 과정 보기 →
+            </Link>
+            <ExternalLinks p={p} />
           </div>
         </div>
       </div>
@@ -204,14 +117,48 @@ function ProjectCard({ p }: { p: Project }) {
   );
 }
 
+function OtherRow({ p, n }: { p: Project; n: number }) {
+  return (
+    <li>
+      <Link
+        href={`/projects/${p.slug}`}
+        className="group grid grid-cols-[2rem_1fr_auto] items-center gap-4 border-t border-line py-5 transition-colors hover:bg-card/50 sm:px-2"
+      >
+        <span className="font-mono text-xs text-muted">{String(n).padStart(2, "0")}</span>
+        <span>
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="text-lg font-bold group-hover:text-accent">{p.title}</span>
+            <StatusBadge status={p.status} />
+          </span>
+          <span className="mt-1 block text-sm text-muted">
+            {p.kind} · <span className="font-mono">{p.period}</span> · {p.team}
+          </span>
+        </span>
+        <span className="font-mono text-sm text-muted transition-transform group-hover:translate-x-1 group-hover:text-accent" aria-hidden>
+          →
+        </span>
+      </Link>
+    </li>
+  );
+}
+
 export function Projects() {
+  const featured = projects.filter((p) => p.featured);
+  const others = projects.filter((p) => !p.featured);
   return (
     <Section id="projects">
-      <div className="space-y-14">
-        {projects.map((p) => (
-          <ProjectCard key={p.slug} p={p} />
+      <p className="mb-10 text-muted">대표 프로젝트 {featured.length}개입니다. 프로젝트를 누르면 문제와 해결 과정을 한 페이지에서 볼 수 있어요.</p>
+      <div className="space-y-16">
+        {featured.map((p) => (
+          <FeaturedCard key={p.slug} p={p} />
         ))}
       </div>
+      <h3 className="font-mono mb-2 mt-20 text-sm text-muted">다른 프로젝트</h3>
+      <ol className="border-b border-line">
+        {others.map((p, i) => (
+          <OtherRow key={p.slug} p={p} n={featured.length + i + 1} />
+        ))}
+      </ol>
     </Section>
   );
 }

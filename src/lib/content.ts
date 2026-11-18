@@ -13,6 +13,11 @@ export type Project = {
   /* 배포 화면을 녹화한 동작 미리보기(애니메이션 WebP)와 정지 프레임. note는 녹화 조건 */
   preview?: { src: string; poster: string; note?: string };
   period: string;
+  /* 운영 상태와 팀 구성. 카드·상세 상단 메타에 쓴다 */
+  status: "운영 중" | "진행 중" | "종료";
+  team: string;
+  /* 홈에서 크게 보여 줄 대표 프로젝트 */
+  featured?: boolean;
   role: L;
   summary: L;
   problem: L;
@@ -28,47 +33,15 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "omfres",
-    preview: { src: "/previews/omfres.webp", poster: "/previews/omfres-poster.webp", note: "배포 사이트 녹화 · 예약 제출 전까지" },
-    thumb: "/shots/thumbs/omfres.webp",
-    title: "상담 예약",
-    kind: "교수 상담 예약 시스템",
-    shot: "/shots/omfres.webp",
-    period: "2026.09",
-    role: { ko: "개인 · 기획·개발·운영 · 교수 3인·학생 22명 사용", en: "Solo · built and operated · used by 3 professors and 22 students" },
-    summary: {
-      ko: "교수별 상담 규칙에 따라 예약 가능한 시간을 만들고 관리자 화면에서 일정을 관리하는 서비스",
-      en: "A reservation service that generates slots from each professor's rules and manages schedules in an admin UI",
-    },
-    problem: {
-      ko: "교수 3인이 학생 22명의 상담 시간을 한 명씩 물어 표로 만들었고, 같은 시간에 요청이 겹치면 구분해 처리해야 했다.",
-      en: "Three professors built the schedule for 22 students by asking one at a time, and concurrent requests for a slot needed explicit conflict handling.",
-    },
-    result: {
-      ko: "교수·날짜·시간 키를 Redis SET NX로 선점하고 중복 요청에 HTTP 409를 반환. 관리자 화면에 예약 조회·추가·이동·삭제, 캘린더와 CSV 내보내기를 구현. 결석했던 학생 3명도 주소만 받고 중복 없이 예약.",
-      en: "Claimed professor/date/time keys with Redis SET NX and returned HTTP 409 for conflicts. Built reservation management, a calendar and CSV export. Three absent students booked without conflicts from the link alone.",
-    },
-    cases: [
-      { title: "같은 시간대 중복 예약", problem: "학생 여러 명이 같은 시간을 동시에 누르면, 빈자리 확인과 저장 사이에 다른 요청이 끼어 한 자리에 두 명이 예약될 수 있었다.", solution: "DB UNIQUE 제약·트랜잭션과 Redis SET NX를 비교했다. 예약이 '교수·날짜·시간' 한 칸 단위라 칸 하나를 키 하나로 두고 SET NX로 선점하게 했다. 서버리스에서 DB 연결을 오래 붙잡지 않는 점도 고려했다.", result: "먼저 도착한 요청만 성공하고 늦은 요청은 HTTP 409로 거절한다. 아래 재현에서 NX를 끄면 중복 예약이 실제로 뚫린다." },
-      { title: "계정 없이 관리자 화면 지키기", problem: "관리자 계정 체계를 붙이기엔 과했지만, PIN 하나만 두면 유출됐을 때 대응할 방법이 없었다.", solution: "PIN은 해시로 저장하고, 세션 서명 키를 PIN 해시에서 만들었다.", result: "PIN을 바꾸면 기존 관리자 세션이 모두 무효화된다." },
-      { title: "운영 중 들어온 요청", problem: "처음 넣은 학번 입력이 예약을 번거롭게 했고, 운영 중 연구실 변경과 예약 이동 요청이 들어왔다.", solution: "가입·학번을 없애고 교수 → 날짜·시간 → 이름 3단계로 줄였다. 요일별 시간대·상담 단위·제외 날짜로 슬롯을 만드는 로직을 분리했다.", result: "연구실 변경은 당일 반영했고, 관리자 캘린더·예약 이동·CSV 내보내기를 운영 중에 추가했다. 상담자를 추가하면 바로 예약을 받는다." },
-    ],
-    stats: [
-      { value: "25", label: { ko: "사용자 · 교수 3 · 학생 22", en: "users · 3 professors, 22 students" } },
-      { value: "409", label: { ko: "중복 요청 응답", en: "conflict response" } },
-    ],
-    stack: ["Next.js 16", "TypeScript", "Upstash Redis"],
-    repo: "https://github.com/khy1121/omfres",
-    demo: "https://onlyonereservation.vercel.app",
-    accent: "#7FD1B9",
-  },
-  {
     slug: "overlap",
     preview: { src: "/previews/overlap.webp", poster: "/previews/overlap-poster.webp", note: "배포 사이트 녹화 · 본인 테스트 약속" },
     thumb: "/shots/thumbs/overlap.webp",
     title: "Overlap",
     kind: "팀 회의 일정 조율",
     period: "2026.11",
+    status: "운영 중",
+    team: "개인",
+    featured: true,
     role: { ko: "개인 · 기획·개발·운영", en: "Solo · planning, development and operation" },
     summary: {
       ko: "각자 되는 시간을 칠하면 모두가 겹치는 시간을 찾아 제안하는 웹앱",
@@ -102,6 +75,9 @@ export const projects: Project[] = [
     title: "붕붕어스",
     kind: "커플 드라이브 기록 웹앱",
     period: "2026.10 – 11",
+    status: "종료",
+    team: "해커톤 · 프론트엔드 2인",
+    featured: true,
     role: { ko: "4호선톤 해커톤 · 프론트엔드 2인 · 커밋 83% · PR 80/108", en: "Line 4 hackathon · 2 frontend devs · 83% of commits · 80 of 108 PRs" },
     summary: {
       ko: "연인과 함께한 드라이브를 기록하고, 테마별 장소 추천과 기록 지도로 다시 떠날 곳을 찾는 모바일 웹앱",
@@ -130,41 +106,6 @@ export const projects: Project[] = [
     accent: "#F2867A",
   },
   {
-    slug: "boardingpass",
-    preview: { src: "/previews/boardingpass.webp", poster: "/previews/boardingpass-poster.webp", note: "백엔드 종료 후 목 데이터 모드로 녹화" },
-    thumb: "/shots/thumbs/boardingpass.webp",
-    title: "MCM Boarding Pass",
-    kind: "패션 브랜드 매장 체험 웹",
-    shot: "/shots/boardingpass.webp",
-    period: "2026.08",
-    role: { ko: "해커톤 팀 6인 · 프론트엔드 총괄(FE 2인) · 커밋 75%", en: "Hackathon team of 6 · frontend lead (2 FE) · 75% of commits" },
-    summary: {
-      ko: "매장 방문을 비행에 비유한 모바일 웹. 회원가입(여권) → 설문 → AI 추천 동선 → 3D 여권 스탬프",
-      en: "Mobile web that frames a store visit as a flight: passport sign-up, survey, AI route, 3D passport stamp",
-    },
-    problem: {
-      ko: "카카오 가입 중 이탈한 사용자가 돌아오면 보호 화면이 빈 데이터로 깨졌다.",
-      en: "Users who dropped mid-signup came back to broken, empty protected screens.",
-    },
-    result: {
-      ko: "ProtectedRoute로 미인증·프로필 미완성·가입 완료를 구분하고 세션 복원과 API 회귀테스트에 기여. 2026.08.20 팀 CI에서 테스트 368개와 빌드 통과.",
-      en: "Separated signed-out, incomplete-profile and completed states in ProtectedRoute, with session recovery and API regression tests. On 2026-08-20, team CI passed 368 tests and the build.",
-    },
-    cases: [
-      { title: "가입 중 이탈한 사용자의 재진입", problem: "카카오 인증 후 추가 정보를 넣지 않고 나간 사용자가 돌아오면 보호 화면이 빈 데이터로 깨졌다. 가드가 토큰 유무만 봤기 때문이다.", solution: "사용자 상태를 비로그인 · 토큰만 있음 · 프로필 완성 셋으로 나누고, StrictMode에서 인가 코드가 두 번 소비되던 문제는 1회 소비 가드로 막았다.", result: "프로필이 미완성이면 가입 2단계로 돌려보내고, 세션 복원 테스트를 작성했다. 아래 재현에서 가드를 끄면 화면이 깨진다." },
-      { title: "카카오톡에서 하단 버튼이 가려짐", problem: "링크가 주로 카톡으로 공유되는데, 인앱 브라우저에서 하단 버튼을 누를 수 없었다.", solution: "iOS에서 lvh·dvh 계산이 틀린다는 WebKit 버그 리포트를 확인하고, CSS 단위 대신 실제로 보이는 높이를 재서 쓰게 했다.", result: "짧은 화면은 여백과 그림을 비율대로 줄여 393×655 재현 환경에서 넘침 0을 확인했다." },
-      { title: "실서버 API 31개 연동과 검증", problem: "목 데이터로 만든 18개 화면을 마감 전에 실제 API에 붙여야 했다.", solution: "응답·에러·401 처리를 공통 apiFetch로 모으고, AbortController로 이전 요청을 취소했다. 막힌 4건은 원인을 좁혀 백엔드에 문서로 넘겼다.", result: "31개 중 30개를 연동했고, 제출 시 44개 파일 368개 테스트 통과를 확인했다." },
-    ],
-    stats: [
-      { value: "368", label: { ko: "팀 CI 테스트 · 26.08.20", en: "team CI tests · 26-08-20" } },
-      { value: "3", label: { ko: "인증 상태 구분", en: "authentication states" } },
-    ],
-    stack: ["React 19", "React Router 7", "three.js", "Vitest"],
-    repo: "https://github.com/Hsu-Likelion-14th-Hackathon/FE",
-    demo: "https://boardingpass-seven.vercel.app",
-    accent: "#F28C6B",
-  },
-  {
     slug: "nadok",
     preview: { src: "/previews/nadok.webp", poster: "/previews/nadok-poster.webp", note: "백엔드 종료 후 목 데이터 모드로 녹화" },
     thumb: "/shots/thumbs/nadok.webp",
@@ -172,6 +113,9 @@ export const projects: Project[] = [
     kind: "독서 기록 · 감정 분석",
     shot: "/shots/nadok.webp",
     period: "2026.05 – 08",
+    status: "종료",
+    team: "팀 · 프론트엔드 담당",
+    featured: true,
     role: { ko: "팀 프론트엔드 · 교내 해커톤 대상", en: "Team frontend · campus hackathon grand prize" },
     summary: {
       ko: "독서 기록과 감정 분석 서비스의 프론트엔드",
@@ -205,6 +149,8 @@ export const projects: Project[] = [
     title: "Cropy",
     kind: "농작물 병해충 AI 진단",
     period: "2026.09 –",
+    status: "진행 중",
+    team: "산학협력 팀 5인",
     role: { ko: "산학협력 팀 5인 · 팀장 · 기획·디자인·백엔드·모델", en: "Industry-academic team of 5 · lead · planning, design, backend and model" },
     summary: {
       ko: "사진 한 장으로 농작물 병해충을 진단하고 농약을 추천하는 플랫폼",
@@ -231,6 +177,80 @@ export const projects: Project[] = [
     repo: "https://github.com/khy1121/Cropy",
     demo: "https://43.202.14.204.sslip.io/",
     accent: "#9CD36A",
+  },
+  {
+    slug: "boardingpass",
+    preview: { src: "/previews/boardingpass.webp", poster: "/previews/boardingpass-poster.webp", note: "백엔드 종료 후 목 데이터 모드로 녹화" },
+    thumb: "/shots/thumbs/boardingpass.webp",
+    title: "MCM Boarding Pass",
+    kind: "패션 브랜드 매장 체험 웹",
+    shot: "/shots/boardingpass.webp",
+    period: "2026.08",
+    status: "종료",
+    team: "해커톤 팀 6인",
+    role: { ko: "해커톤 팀 6인 · 프론트엔드 총괄(FE 2인) · 커밋 75%", en: "Hackathon team of 6 · frontend lead (2 FE) · 75% of commits" },
+    summary: {
+      ko: "매장 방문을 비행에 비유한 모바일 웹. 회원가입(여권) → 설문 → AI 추천 동선 → 3D 여권 스탬프",
+      en: "Mobile web that frames a store visit as a flight: passport sign-up, survey, AI route, 3D passport stamp",
+    },
+    problem: {
+      ko: "카카오 가입 중 이탈한 사용자가 돌아오면 보호 화면이 빈 데이터로 깨졌다.",
+      en: "Users who dropped mid-signup came back to broken, empty protected screens.",
+    },
+    result: {
+      ko: "ProtectedRoute로 미인증·프로필 미완성·가입 완료를 구분하고 세션 복원과 API 회귀테스트에 기여. 2026.08.20 팀 CI에서 테스트 368개와 빌드 통과.",
+      en: "Separated signed-out, incomplete-profile and completed states in ProtectedRoute, with session recovery and API regression tests. On 2026-08-20, team CI passed 368 tests and the build.",
+    },
+    cases: [
+      { title: "가입 중 이탈한 사용자의 재진입", problem: "카카오 인증 후 추가 정보를 넣지 않고 나간 사용자가 돌아오면 보호 화면이 빈 데이터로 깨졌다. 가드가 토큰 유무만 봤기 때문이다.", solution: "사용자 상태를 비로그인 · 토큰만 있음 · 프로필 완성 셋으로 나누고, StrictMode에서 인가 코드가 두 번 소비되던 문제는 1회 소비 가드로 막았다.", result: "프로필이 미완성이면 가입 2단계로 돌려보내고, 세션 복원 테스트를 작성했다. 아래 재현에서 가드를 끄면 화면이 깨진다." },
+      { title: "카카오톡에서 하단 버튼이 가려짐", problem: "링크가 주로 카톡으로 공유되는데, 인앱 브라우저에서 하단 버튼을 누를 수 없었다.", solution: "iOS에서 lvh·dvh 계산이 틀린다는 WebKit 버그 리포트를 확인하고, CSS 단위 대신 실제로 보이는 높이를 재서 쓰게 했다.", result: "짧은 화면은 여백과 그림을 비율대로 줄여 393×655 재현 환경에서 넘침 0을 확인했다." },
+      { title: "실서버 API 31개 연동과 검증", problem: "목 데이터로 만든 18개 화면을 마감 전에 실제 API에 붙여야 했다.", solution: "응답·에러·401 처리를 공통 apiFetch로 모으고, AbortController로 이전 요청을 취소했다. 막힌 4건은 원인을 좁혀 백엔드에 문서로 넘겼다.", result: "31개 중 30개를 연동했고, 제출 시 44개 파일 368개 테스트 통과를 확인했다." },
+    ],
+    stats: [
+      { value: "368", label: { ko: "팀 CI 테스트 · 26.08.20", en: "team CI tests · 26-08-20" } },
+      { value: "3", label: { ko: "인증 상태 구분", en: "authentication states" } },
+    ],
+    stack: ["React 19", "React Router 7", "three.js", "Vitest"],
+    repo: "https://github.com/Hsu-Likelion-14th-Hackathon/FE",
+    demo: "https://boardingpass-seven.vercel.app",
+    accent: "#F28C6B",
+  },
+  {
+    slug: "omfres",
+    preview: { src: "/previews/omfres.webp", poster: "/previews/omfres-poster.webp", note: "배포 사이트 녹화 · 예약 제출 전까지" },
+    thumb: "/shots/thumbs/omfres.webp",
+    title: "상담 예약",
+    kind: "교수 상담 예약 시스템",
+    shot: "/shots/omfres.webp",
+    period: "2026.09",
+    status: "운영 중",
+    team: "개인",
+    role: { ko: "개인 · 기획·개발·운영 · 교수 3인·학생 22명 사용", en: "Solo · built and operated · used by 3 professors and 22 students" },
+    summary: {
+      ko: "교수별 상담 규칙에 따라 예약 가능한 시간을 만들고 관리자 화면에서 일정을 관리하는 서비스",
+      en: "A reservation service that generates slots from each professor's rules and manages schedules in an admin UI",
+    },
+    problem: {
+      ko: "교수 3인이 학생 22명의 상담 시간을 한 명씩 물어 표로 만들었고, 같은 시간에 요청이 겹치면 구분해 처리해야 했다.",
+      en: "Three professors built the schedule for 22 students by asking one at a time, and concurrent requests for a slot needed explicit conflict handling.",
+    },
+    result: {
+      ko: "교수·날짜·시간 키를 Redis SET NX로 선점하고 중복 요청에 HTTP 409를 반환. 관리자 화면에 예약 조회·추가·이동·삭제, 캘린더와 CSV 내보내기를 구현. 결석했던 학생 3명도 주소만 받고 중복 없이 예약.",
+      en: "Claimed professor/date/time keys with Redis SET NX and returned HTTP 409 for conflicts. Built reservation management, a calendar and CSV export. Three absent students booked without conflicts from the link alone.",
+    },
+    cases: [
+      { title: "같은 시간대 중복 예약", problem: "학생 여러 명이 같은 시간을 동시에 누르면, 빈자리 확인과 저장 사이에 다른 요청이 끼어 한 자리에 두 명이 예약될 수 있었다.", solution: "DB UNIQUE 제약·트랜잭션과 Redis SET NX를 비교했다. 예약이 '교수·날짜·시간' 한 칸 단위라 칸 하나를 키 하나로 두고 SET NX로 선점하게 했다. 서버리스에서 DB 연결을 오래 붙잡지 않는 점도 고려했다.", result: "먼저 도착한 요청만 성공하고 늦은 요청은 HTTP 409로 거절한다. 아래 재현에서 NX를 끄면 중복 예약이 실제로 뚫린다." },
+      { title: "계정 없이 관리자 화면 지키기", problem: "관리자 계정 체계를 붙이기엔 과했지만, PIN 하나만 두면 유출됐을 때 대응할 방법이 없었다.", solution: "PIN은 해시로 저장하고, 세션 서명 키를 PIN 해시에서 만들었다.", result: "PIN을 바꾸면 기존 관리자 세션이 모두 무효화된다." },
+      { title: "운영 중 들어온 요청", problem: "처음 넣은 학번 입력이 예약을 번거롭게 했고, 운영 중 연구실 변경과 예약 이동 요청이 들어왔다.", solution: "가입·학번을 없애고 교수 → 날짜·시간 → 이름 3단계로 줄였다. 요일별 시간대·상담 단위·제외 날짜로 슬롯을 만드는 로직을 분리했다.", result: "연구실 변경은 당일 반영했고, 관리자 캘린더·예약 이동·CSV 내보내기를 운영 중에 추가했다. 상담자를 추가하면 바로 예약을 받는다." },
+    ],
+    stats: [
+      { value: "25", label: { ko: "사용자 · 교수 3 · 학생 22", en: "users · 3 professors, 22 students" } },
+      { value: "409", label: { ko: "중복 요청 응답", en: "conflict response" } },
+    ],
+    stack: ["Next.js 16", "TypeScript", "Upstash Redis"],
+    repo: "https://github.com/khy1121/omfres",
+    demo: "https://onlyonereservation.vercel.app",
+    accent: "#7FD1B9",
   },
 ];
 
@@ -356,10 +376,14 @@ export const resume = {
       ],
     },
     {
-      org: "창업동아리",
-      title: "기획 담당",
-      period: "2026",
-      bullets: ["문제 정의, 기능 우선순위 결정, 심사·제출 문서 작성"],
+      org: "창업동아리 · 바더",
+      title: "기획 담당 · AI 전화 일기 서비스",
+      period: "2026 – 진행 중",
+      bullets: [
+        "AI가 정해진 시간에 먼저 전화를 걸어 5분간 대화하고, 통화가 끝나면 1인칭 일기를 써 주는 서비스 '바더'를 기획 (기획서 v1.6)",
+        "기능 명세서(화면별 기능 ID·P0~P2 우선순위)·화면 설계서(IA·플로우·엣지 케이스)·디자인 스펙을 작성하고, Figma 와이어프레임 25화면을 정리",
+        "통화 응답률 60%+, D7 리텐션 50% 등 핵심 지표와 동아리원 15~20명 대상 2주 알파 테스트 계획 수립",
+      ],
     },
   ],
   education: [

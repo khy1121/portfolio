@@ -5,6 +5,7 @@
 | 경로 | 용도 | 성격 |
 |---|---|---|
 | `/` | 채용 담당자가 1분 안에 훑는 화면 | 이력서형 한 페이지. 왼쪽 고정 메뉴, 고정폭 라벨, 강조색 하나 |
+| `/projects/[slug]` | 프로젝트 하나에 집중하는 케이스 스터디 | 미리보기 · 상태·기간·팀·역할·기술 · 숫자 → 문제와 해결 과정 3가지 → 재현 위젯 → 이전/다음 |
 | `/showcase` | 구현력을 보여 주는 화면 | 커스텀 커서, 겹쳐 쌓이는 카드, ⌘K 팔레트, 등고선 테마 전환 |
 
 **Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · Framer Motion · React Three Fiber · Lenis**
@@ -28,7 +29,7 @@ npx eslint src   # React 19 컴파일러 규칙 포함
 | 사이드바 | 이름·직무, 섹션 메뉴(보고 있는 섹션을 `IntersectionObserver`로 표시), GitHub·이메일·이력서 PDF·인터랙티브 버전, 테마 전환. 모바일에서는 상단 바 |
 | Hero · About | 이름·직무·한 줄 소개와 바로가기, 소개 문단 3개 |
 | Skills | 분야별 기술 묶음 |
-| Projects | 배포 화면 녹화 미리보기(애니메이션 WebP, `public/previews/`) · 기간 · 역할 · 숫자 · 기술 태그 · Live/Code. 문제와 해결 과정 3가지는 `<details>`로 펼친다. 모션 줄이기 설정이면 정지 프레임 |
+| Projects | 대표 3개(`featured`)는 크게: 동작 미리보기 · 상태(운영 중/진행 중/종료) · 기간 · 팀 · 숫자 · 기술 · "문제와 해결 과정 보기". 나머지는 한 줄 목록. 모두 `/projects/[slug]` 상세로 연결 |
 | Experience · Education | 기간 / 제목 / 소속 / 성과 목록. 자격·수상 |
 | Contact | 이메일 복사·GitHub·이력서 PDF |
 
@@ -67,7 +68,7 @@ src/
     glsl.ts       공유 셰이더 조각
     rng.ts        시드 기반 난수(React 컴파일러가 렌더 중 Math.random을 막는다)
   components/
-    resume/       `/` 전용 (Sidebar, Sections, CopyEmail)
+    resume/       `/`와 `/projects/[slug]` (Sidebar, Sections, ProjectParts, CopyEmail)
     TerrainField, ProjectStage, ShotGrid   — `/showcase`가 사용
     fx/           재현 위젯(RaceSim, GuardMachine) — 두 화면이 공유
     showcase/     `/showcase` 전용 컴포넌트와 fx/ 연출 모듈
