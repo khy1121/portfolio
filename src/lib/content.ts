@@ -24,6 +24,8 @@ export type Project = {
   result: L;
   /* 기본 페이지(/)의 "문제와 해결 과정"에 펼쳐 보이는 사례. 프로젝트마다 3개 */
   cases: Case[];
+  /* 이력서(/resume)용 한두 줄 요약. 자세한 과정은 상세 페이지에 둔다 */
+  resumeLines: string[];
   stats: { value: string; label: L }[];
   stack: string[];
   repo?: string;
@@ -60,6 +62,7 @@ export const projects: Project[] = [
       { title: "가입과 초대의 부담", problem: "일정 하나 맞추자고 이메일 가입을 요구하면 팀원이 들어오지 않는다.", solution: "이메일 없이 가입하게 하고, Edge Function이 SHA-256(이름|생년월일)로 내부 식별자를 만든다. 카카오 로그인과 카톡 공유 초대를 붙였다.", result: "생년월일은 저장하지 않는다. Google 캘린더는 free/busy 범위만 요청해 일정 내용은 받지 않는다." },
       { title: "직접 쓰면서 찾은 버그", problem: "카카오톡 인앱 브라우저·갤럭시 큰 글꼴에서 화면이 옆으로 밀렸고, 새 버전 배포 직후 흰 화면이 떴다.", solution: "뷰포트 폭과 글꼴 확대에 맞춰 레이아웃을 고치고, 배포 직후 MIME text/html로 깨지는 경우를 막았다.", result: "앱을 켜 둔 사이 새 버전이 나오면 새로고침 안내를 띄운다. 2주간 17명이 가입해 14명이 일정을 입력했고, 회의 6건을 확정했다." },
     ],
+    resumeLines: ["Supabase Realtime과 RLS로 여러 명이 동시에 칠하는 시간표를 만들고, 전원 가능 시간과 추천 시간을 연속 구간으로 계산", "이메일 없는 가입과 카카오 공유 초대로 참여 장벽을 낮추고, 운영 중 발견한 인앱 브라우저 레이아웃·배포 직후 흰 화면 문제를 수정"],
     stats: [
       { value: "6", label: { ko: "확정한 회의 · 2~7명", en: "meetings settled · 2–7 people" } },
       { value: "14", label: { ko: "일정 입력 사용자 · 가입 17", en: "people entered availability · 17 signed up" } },
@@ -96,6 +99,7 @@ export const projects: Project[] = [
       { title: "준비만 하고 나간 드라이브가 연결 해제를 막음", problem: "경로 설정 중에 나가면 '준비 중' 드라이브가 남아 커플 연결 해제가 ACTIVE_DRIVE_EXISTS로 막혔는데, 드라이브 화면에는 준비 중인 드라이브를 끝낼 버튼이 없었다.", solution: "연결 해제 실패 원인을 구분해, 준비 중이면 시트에서 바로 취소하고 이미 출발한 드라이브는 드라이브 화면으로 보내 마치게 했다. 홈 배너도 '준비 중인 드라이브'를 따로 알린다.", result: "사용자가 스스로 빠져나올 수 있는 경로를 만들었고, 세 가지 결과(취소·이동·없음)를 테스트와 Storybook 스토리로 남겼다." },
       { title: "시트가 열릴 때 화면 전체가 들썩임", problem: "바텀시트·팝업이 올라올 때 화면 전체가 위아래로 튀었다.", solution: "원인은 접근성을 위해 시트로 포커스를 옮길 때 브라우저가 해당 요소로 스크롤한 것이었다. 포커스 이동은 유지하고 focus({ preventScroll: true })로 스크롤만 막았다.", result: "키보드·스크린리더 사용자의 포커스 흐름은 그대로 두고 흔들림을 없앴으며, 회귀 테스트를 추가했다." },
     ],
+    resumeLines: ["앱을 다시 열면 자식 effect가 세션 복구보다 먼저 실행돼 첫 요청이 401 → 초기화 단계에서 저장된 토큰을 미리 싣도록 고치고 재현 테스트 추가", "준비만 하고 나간 드라이브가 커플 연결 해제를 막던 문제를 시트에서 바로 정리하게 해결, Storybook·Chromatic으로 PR마다 화면 변경 비교"],
     stats: [
       { value: "83%", label: { ko: "커밋 410/496", en: "commits 410/496" } },
       { value: "130", label: { ko: "테스트 파일", en: "test files" } },
@@ -134,6 +138,7 @@ export const projects: Project[] = [
       { title: "배포할 때마다 흰 화면 위험", problem: "코드 분할 후 배포하면, 열어 둔 화면이 사라진 옛 파일을 요청해 하얗게 깨질 수 있었다.", solution: "없는 파일은 404로 응답하게 하고, 화면 파일을 못 받으면 한 번만 새로고침한다. PWA는 30분마다와 복귀 시 업데이트를 확인해 배너로 알린다.", result: "성능 기법이 새 실패를 만든다는 것을 배웠다. 도입할 때 실패 상황까지 함께 설계한다." },
       { title: "성공처럼 보이던 분석 실패", problem: "감정 분석 API가 실패해도 기본 캐릭터가 떠서 사용자가 실패를 알 수 없었다.", solution: "실패하면 오류 화면과 재시도로 보내고, 백엔드가 대체 결과를 주면 '임의 추천' 배너를 붙였다.", result: "함께 8.79MB SVG 배너를 16KB WebP로 바꾸는 등 경량화로 첫 방문 전송량을 23MB에서 2.3MB로 줄였다." },
     ],
+    resumeLines: ["HTTPS 배포 후 HTTP 백엔드 호출이 Mixed Content로 전부 막힌 문제를 Vercel Function 프록시로 해결", "코드 분할 후 배포 직후 흰 화면 위험을 404 응답과 1회 새로고침으로 막고, 경량화로 첫 방문 전송량 23MB → 2.3MB"],
     stats: [
       { value: "99.8%", label: { ko: "배너 용량 감소 · 8.79MB → 16KB", en: "banner size cut · 8.79MB → 16KB" } },
       { value: "대상", label: { ko: "멋쟁이사자처럼 교내 해커톤", en: "Likelion campus hackathon grand prize" } },
@@ -169,6 +174,7 @@ export const projects: Project[] = [
       { title: "자꾸 헷갈리는 병해 한 쌍", problem: "ResNet50으로 test 정확도 93.1%를 얻었지만, 오분류 44건 중 26건(59%)이 무 검은무늬병 ↔ 무 노균병 한 쌍에 몰렸다.", solution: "두 후보의 신뢰도가 비슷하면 하나로 단정하지 않고, 구분에 필요한 부위를 다시 찍게 안내해 두 결과를 합쳐 확정하는 흐름을 설계했다.", result: "이 쌍만 구분하는 분류기도 실험했지만 나은 점이 없어 채택하지 않았고, 결과를 모델 문서에 남겼다." },
       { title: "동급생 팀원에게 일 나누기", problem: "동급생에게 지시가 부담스러워 각자 할 일을 정해 오라 했더니 '뭘 할지 모르겠다'는 답이 돌아왔다.", solution: "자율은 배려가 아니라 팀장 일을 미룬 것이라고 판단하고, 주차별 스프린트와 GitHub 이슈로 작업을 나눴다. 모델이 없을 때는 Mock 모드로 돌게 했다.", result: "첫날 문서 21종과 기본 코드를 올려 바로 개발을 시작했고, 팀 저장소에 PR 48건을 병합했다. PR마다 GitHub Actions로 테스트·빌드를 검사한다." },
     ],
+    resumeLines: ["통신이 끊긴 농지에서도 브라우저에서 진단(ONNX Runtime Web·Service Worker·IndexedDB), 오분류의 59%가 몰린 병해 한 쌍은 재촬영 후 합산 판정"],
     stats: [
       { value: "9", label: { ko: "분류 클래스", en: "classification classes" } },
       { value: "48", label: { ko: "병합한 PR", en: "pull requests merged" } },
@@ -206,6 +212,7 @@ export const projects: Project[] = [
       { title: "카카오톡에서 하단 버튼이 가려짐", problem: "링크가 주로 카톡으로 공유되는데, 인앱 브라우저에서 하단 버튼을 누를 수 없었다.", solution: "iOS에서 lvh·dvh 계산이 틀린다는 WebKit 버그 리포트를 확인하고, CSS 단위 대신 실제로 보이는 높이를 재서 쓰게 했다.", result: "짧은 화면은 여백과 그림을 비율대로 줄여 393×655 재현 환경에서 넘침 0을 확인했다." },
       { title: "실서버 API 31개 연동과 검증", problem: "목 데이터로 만든 18개 화면을 마감 전에 실제 API에 붙여야 했다.", solution: "응답·에러·401 처리를 공통 apiFetch로 모으고, AbortController로 이전 요청을 취소했다. 막힌 4건은 원인을 좁혀 백엔드에 문서로 넘겼다.", result: "31개 중 30개를 연동했고, 제출 시 44개 파일 368개 테스트 통과를 확인했다." },
     ],
+    resumeLines: ["토큰만 보던 가드를 비로그인·토큰만 있음·프로필 완성 3상태로 나눠 가입 중 이탈한 사용자의 화면 깨짐 해결, 실서버 API 30/31 연동"],
     stats: [
       { value: "368", label: { ko: "팀 CI 테스트 · 26.08.20", en: "team CI tests · 26-08-20" } },
       { value: "3", label: { ko: "인증 상태 구분", en: "authentication states" } },
@@ -243,6 +250,7 @@ export const projects: Project[] = [
       { title: "계정 없이 관리자 화면 지키기", problem: "관리자 계정 체계를 붙이기엔 과했지만, PIN 하나만 두면 유출됐을 때 대응할 방법이 없었다.", solution: "PIN은 해시로 저장하고, 세션 서명 키를 PIN 해시에서 만들었다.", result: "PIN을 바꾸면 기존 관리자 세션이 모두 무효화된다." },
       { title: "운영 중 들어온 요청", problem: "처음 넣은 학번 입력이 예약을 번거롭게 했고, 운영 중 연구실 변경과 예약 이동 요청이 들어왔다.", solution: "가입·학번을 없애고 교수 → 날짜·시간 → 이름 3단계로 줄였다. 요일별 시간대·상담 단위·제외 날짜로 슬롯을 만드는 로직을 분리했다.", result: "연구실 변경은 당일 반영했고, 관리자 캘린더·예약 이동·CSV 내보내기를 운영 중에 추가했다. 상담자를 추가하면 바로 예약을 받는다." },
     ],
+    resumeLines: ["교수 3명·학생 22명이 쓰는 예약 사이트를 혼자 운영, Redis SET NX로 같은 시간대 동시 예약을 차단(409)하고 운영 요청은 당일 반영"],
     stats: [
       { value: "25", label: { ko: "사용자 · 교수 3 · 학생 22", en: "users · 3 professors, 22 students" } },
       { value: "409", label: { ko: "중복 요청 응답", en: "conflict response" } },

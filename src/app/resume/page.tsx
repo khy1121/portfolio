@@ -58,9 +58,9 @@ const featured = projects.filter((p) => p.featured);
 const others = projects.filter((p) => !p.featured);
 
 function ProjectDetail({ p, full }: { p: Project; full: boolean }) {
-  const cases = full ? p.cases : p.cases.slice(0, 1);
+  const cases = full ? p.cases.slice(0, 2) : p.cases.slice(0, 1);
   return (
-    <article className="mb-8">
+    <article className="mb-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1" style={{ breakAfter: "avoid" }}>
         <h3 className="text-[16px] font-bold">
           {p.title}
@@ -205,7 +205,7 @@ export default function ResumePage() {
                       </span>
                     </p>
                     <ul className="mt-1.5 space-y-1 text-[12px]">
-                      {e.bullets.map((b) => (
+                      {e.bullets.slice(0, 2).map((b) => (
                         <Bullet key={b}>{b}</Bullet>
                       ))}
                     </ul>
@@ -318,7 +318,7 @@ export default function ResumePage() {
 
           <Section no="06" title="프로젝트 기술서" breakBefore>
             <p className="mb-5 text-[11.5px]" style={{ color: C.sub }}>
-              대표 프로젝트는 문제 해결 과정 3가지, 나머지는 대표 사례 1가지를 적었습니다. 모든 프로젝트의 동작 화면과 직접 눌러 보는 문제 재현은 포트폴리오 사이트의 상세 페이지에 있습니다.
+              대표 프로젝트는 문제 해결 과정 2가지, 나머지는 1가지를 적었습니다. 모든 프로젝트의 동작 화면과 직접 눌러 보는 문제 재현은 포트폴리오 사이트의 상세 페이지에 있습니다.
             </p>
             {featured.map((p) => (
               <ProjectDetail key={p.slug} p={p} full />
