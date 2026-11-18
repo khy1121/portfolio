@@ -130,15 +130,31 @@ function ProjectCard({ p }: { p: Project }) {
                 +
               </span>
             </summary>
-            <div className="space-y-4 border-t border-line px-4 py-4 text-sm leading-relaxed">
-              <div>
-                <p className="font-mono text-xs text-accent">문제</p>
-                <p className="mt-1">{p.problem.ko}</p>
-              </div>
-              <div>
-                <p className="font-mono text-xs text-accent">결과</p>
-                <p className="mt-1">{p.result.ko}</p>
-              </div>
+            <div className="space-y-6 border-t border-line px-4 py-5 text-sm leading-relaxed">
+              <ol className="space-y-6">
+                {p.cases.map((c, i) => (
+                  <li key={c.title}>
+                    <h4 className="font-semibold">
+                      <span className="font-mono mr-2 text-accent">{String(i + 1).padStart(2, "0")}</span>
+                      {c.title}
+                    </h4>
+                    <dl className="mt-2 space-y-1.5 border-l border-line pl-4">
+                      {(
+                        [
+                          ["문제", c.problem],
+                          ["해결", c.solution],
+                          ["결과", c.result],
+                        ] as const
+                      ).map(([k, v]) => (
+                        <div key={k} className="grid grid-cols-[2.5rem_1fr] gap-2">
+                          <dt className="font-mono text-xs leading-6 text-muted">{k}</dt>
+                          <dd>{v}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </li>
+                ))}
+              </ol>
               {sim && (
                 <div>
                   <p className="font-mono mb-3 text-xs text-muted">직접 눌러 볼 수 있는 재현</p>

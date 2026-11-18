@@ -2,6 +2,8 @@ export type Lang = "ko" | "en";
 
 type L = { ko: string; en: string };
 
+export type Case = { title: string; problem: string; solution: string; result: string };
+
 export type Project = {
   slug: string;
   title: string;
@@ -13,6 +15,8 @@ export type Project = {
   summary: L;
   problem: L;
   result: L;
+  /* 기본 페이지(/)의 "문제와 해결 과정"에 펼쳐 보이는 사례. 프로젝트마다 3개 */
+  cases: Case[];
   stats: { value: string; label: L }[];
   stack: string[];
   repo?: string;
@@ -41,6 +45,11 @@ export const projects: Project[] = [
       ko: "교수·날짜·시간 키를 Redis SET NX로 선점하고 중복 요청에 HTTP 409를 반환. 관리자 화면에 예약 조회·추가·이동·삭제, 캘린더와 CSV 내보내기를 구현. 결석했던 학생 3명도 주소만 받고 중복 없이 예약.",
       en: "Claimed professor/date/time keys with Redis SET NX and returned HTTP 409 for conflicts. Built reservation management, a calendar and CSV export. Three absent students booked without conflicts from the link alone.",
     },
+    cases: [
+      { title: "같은 시간대 중복 예약", problem: "학생 여러 명이 같은 시간을 동시에 누르면, 빈자리 확인과 저장 사이에 다른 요청이 끼어 한 자리에 두 명이 예약될 수 있었다.", solution: "DB UNIQUE 제약·트랜잭션과 Redis SET NX를 비교했다. 예약이 '교수·날짜·시간' 한 칸 단위라 칸 하나를 키 하나로 두고 SET NX로 선점하게 했다. 서버리스에서 DB 연결을 오래 붙잡지 않는 점도 고려했다.", result: "먼저 도착한 요청만 성공하고 늦은 요청은 HTTP 409로 거절한다. 아래 재현에서 NX를 끄면 중복 예약이 실제로 뚫린다." },
+      { title: "계정 없이 관리자 화면 지키기", problem: "관리자 계정 체계를 붙이기엔 과했지만, PIN 하나만 두면 유출됐을 때 대응할 방법이 없었다.", solution: "PIN은 해시로 저장하고, 세션 서명 키를 PIN 해시에서 만들었다.", result: "PIN을 바꾸면 기존 관리자 세션이 모두 무효화된다." },
+      { title: "운영 중 들어온 요청", problem: "처음 넣은 학번 입력이 예약을 번거롭게 했고, 운영 중 연구실 변경과 예약 이동 요청이 들어왔다.", solution: "가입·학번을 없애고 교수 → 날짜·시간 → 이름 3단계로 줄였다. 요일별 시간대·상담 단위·제외 날짜로 슬롯을 만드는 로직을 분리했다.", result: "연구실 변경은 당일 반영했고, 관리자 캘린더·예약 이동·CSV 내보내기를 운영 중에 추가했다. 상담자를 추가하면 바로 예약을 받는다." },
+    ],
     stats: [
       { value: "25", label: { ko: "사용자 · 교수 3 · 학생 22", en: "users · 3 professors, 22 students" } },
       { value: "409", label: { ko: "중복 요청 응답", en: "conflict response" } },
@@ -69,6 +78,11 @@ export const projects: Project[] = [
       ko: "초대된 약속에 일정을 한 번 입력하면 전원이 되는 시간과 추천 시간을 계산. Supabase Realtime으로 입력을 동기화하고 RLS로 본인 일정만 수정하게 제한. 약 10명이 사용해 회의 5회를 확정.",
       en: "One entry per person yields the shared and recommended slots. Supabase Realtime syncs input and RLS limits edits to your own schedule. About 10 people used it to settle 5 meetings.",
     },
+    cases: [
+      { title: "여러 명이 동시에 칠하는 시간표", problem: "각자 시간표를 칠하는 동안 다른 사람 입력이 보이지 않으면 결국 메신저로 다시 확인해야 했다.", solution: "Supabase Realtime으로 입력을 바로 동기화하고, RLS 정책으로 자기 일정만 고칠 수 있게 했다.", result: "전원 가능 시간과 추천 시간을 연속 구간으로 보여 주고, 입력한 사람이 절반이 안 되면 확정 대신 초대부터 권한다." },
+      { title: "가입과 초대의 부담", problem: "일정 하나 맞추자고 이메일 가입을 요구하면 팀원이 들어오지 않는다.", solution: "이메일 없이 가입하게 하고, Edge Function이 SHA-256(이름|생년월일)로 내부 식별자를 만든다. 카카오 로그인과 카톡 공유 초대를 붙였다.", result: "생년월일은 저장하지 않는다. Google 캘린더는 free/busy 범위만 요청해 일정 내용은 받지 않는다." },
+      { title: "직접 쓰면서 찾은 버그", problem: "카카오톡 인앱 브라우저·갤럭시 큰 글꼴에서 화면이 옆으로 밀렸고, 새 버전 배포 직후 흰 화면이 떴다.", solution: "뷰포트 폭과 글꼴 확대에 맞춰 레이아웃을 고치고, 배포 직후 MIME text/html로 깨지는 경우를 막았다.", result: "앱을 켜 둔 사이 새 버전이 나오면 새로고침 안내를 띄운다. 약 10명이 써서 회의 5회를 확정했다." },
+    ],
     stats: [
       { value: "5", label: { ko: "확정한 회의", en: "meetings settled" } },
       { value: "10", label: { ko: "사용자(약)", en: "users (approx.)" } },
@@ -98,6 +112,11 @@ export const projects: Project[] = [
       ko: "ProtectedRoute로 미인증·프로필 미완성·가입 완료를 구분하고 세션 복원과 API 회귀테스트에 기여. 2026.08.20 팀 CI에서 테스트 368개와 빌드 통과.",
       en: "Separated signed-out, incomplete-profile and completed states in ProtectedRoute, with session recovery and API regression tests. On 2026-08-20, team CI passed 368 tests and the build.",
     },
+    cases: [
+      { title: "가입 중 이탈한 사용자의 재진입", problem: "카카오 인증 후 추가 정보를 넣지 않고 나간 사용자가 돌아오면 보호 화면이 빈 데이터로 깨졌다. 가드가 토큰 유무만 봤기 때문이다.", solution: "사용자 상태를 비로그인 · 토큰만 있음 · 프로필 완성 셋으로 나누고, StrictMode에서 인가 코드가 두 번 소비되던 문제는 1회 소비 가드로 막았다.", result: "프로필이 미완성이면 가입 2단계로 돌려보내고, 세션 복원 테스트를 작성했다. 아래 재현에서 가드를 끄면 화면이 깨진다." },
+      { title: "카카오톡에서 하단 버튼이 가려짐", problem: "링크가 주로 카톡으로 공유되는데, 인앱 브라우저에서 하단 버튼을 누를 수 없었다.", solution: "iOS에서 lvh·dvh 계산이 틀린다는 WebKit 버그 리포트를 확인하고, CSS 단위 대신 실제로 보이는 높이를 재서 쓰게 했다.", result: "짧은 화면은 여백과 그림을 비율대로 줄여 393×655 재현 환경에서 넘침 0을 확인했다." },
+      { title: "실서버 API 31개 연동과 검증", problem: "목 데이터로 만든 18개 화면을 마감 전에 실제 API에 붙여야 했다.", solution: "응답·에러·401 처리를 공통 apiFetch로 모으고, AbortController로 이전 요청을 취소했다. 막힌 4건은 원인을 좁혀 백엔드에 문서로 넘겼다.", result: "31개 중 30개를 연동했고, 제출 시 44개 파일 368개 테스트 통과를 확인했다." },
+    ],
     stats: [
       { value: "368", label: { ko: "팀 CI 테스트 · 26.08.20", en: "team CI tests · 26-08-20" } },
       { value: "3", label: { ko: "인증 상태 구분", en: "authentication states" } },
@@ -127,6 +146,11 @@ export const projects: Project[] = [
       ko: "Vercel Functions의 동일 출처 프록시와 이미지 URL 정규화를 적용. 회원정보·세션 검사를 공통화하고 모바일 키보드 대응과 PWA 업데이트 안내를 추가. 8.79MB SVG 배너는 16KB WebP로 교체.",
       en: "Added a same-origin Vercel Functions proxy and image URL normalization, shared profile/session checks, mobile keyboard handling and PWA update prompts. Replaced an 8.79MB SVG banner with a 16KB WebP.",
     },
+    cases: [
+      { title: "배포하자마자 막힌 백엔드 호출", problem: "HTTPS 페이지에서 HTTP 백엔드를 부르니 Mixed Content로 전부 막혔고, 서버 주소도 클라이언트 코드에 드러나 있었다.", solution: "Vercel Function 프록시와 rewrite로 /api, /uploads 요청을 거쳐 가게 하고, 실제 주소는 환경변수에만 두었다.", result: "HTTPS 페이지에서 HTTP 주소를 쓰면 axios 단계에서 막히게 해 같은 실수를 반복하지 않게 했다." },
+      { title: "배포할 때마다 흰 화면 위험", problem: "코드 분할 후 배포하면, 열어 둔 화면이 사라진 옛 파일을 요청해 하얗게 깨질 수 있었다.", solution: "없는 파일은 404로 응답하게 하고, 화면 파일을 못 받으면 한 번만 새로고침한다. PWA는 30분마다와 복귀 시 업데이트를 확인해 배너로 알린다.", result: "성능 기법이 새 실패를 만든다는 것을 배웠다. 도입할 때 실패 상황까지 함께 설계한다." },
+      { title: "성공처럼 보이던 분석 실패", problem: "감정 분석 API가 실패해도 기본 캐릭터가 떠서 사용자가 실패를 알 수 없었다.", solution: "실패하면 오류 화면과 재시도로 보내고, 백엔드가 대체 결과를 주면 '임의 추천' 배너를 붙였다.", result: "함께 8.79MB SVG 배너를 16KB WebP로 바꾸는 등 경량화로 첫 방문 전송량을 23MB에서 2.3MB로 줄였다." },
+    ],
     stats: [
       { value: "99.8%", label: { ko: "배너 용량 감소 · 8.79MB → 16KB", en: "banner size cut · 8.79MB → 16KB" } },
       { value: "대상", label: { ko: "멋쟁이사자처럼 교내 해커톤", en: "Likelion campus hackathon grand prize" } },
@@ -154,6 +178,11 @@ export const projects: Project[] = [
       ko: "사진 업로드·결과·재촬영·이력 조회를 FastAPI와 연결. ResNet 기반 병해·정상 9개 클래스의 학습·평가 코드를 구현하고 요구사항과 API·DB 명세 초안을 정리.",
       en: "Connected photo upload, results, retakes and history to FastAPI. Implemented ResNet training and evaluation for 9 classes, and drafted requirements and API/database specifications.",
     },
+    cases: [
+      { title: "통신이 끊긴 농지에서의 진단", problem: "농지는 통신이 자주 끊겨, 서버 진단에만 의존하면 현장에서 쓸 수 없었다.", solution: "ONNX Runtime Web·Service Worker·IndexedDB로 브라우저 안에서 진단하고 기록을 저장한다. 저장이 실패하면 같은 사진으로 다시 시도할 수 있게 했다.", result: "다시 연결되면 기기 기록을 서버와 동기화한다. 이력 화면에는 필터·빈 상태·재조회를 추가했다." },
+      { title: "자꾸 헷갈리는 병해 한 쌍", problem: "ResNet50으로 test 정확도 93.1%를 얻었지만, 오분류 44건 중 26건(59%)이 무 검은무늬병 ↔ 무 노균병 한 쌍에 몰렸다.", solution: "두 후보의 신뢰도가 비슷하면 하나로 단정하지 않고, 구분에 필요한 부위를 다시 찍게 안내해 두 결과를 합쳐 확정하는 흐름을 설계했다.", result: "이 쌍만 구분하는 분류기도 실험했지만 나은 점이 없어 채택하지 않았고, 결과를 모델 문서에 남겼다." },
+      { title: "동급생 팀원에게 일 나누기", problem: "동급생에게 지시가 부담스러워 각자 할 일을 정해 오라 했더니 '뭘 할지 모르겠다'는 답이 돌아왔다.", solution: "자율은 배려가 아니라 팀장 일을 미룬 것이라고 판단하고, 주차별 스프린트와 GitHub 이슈로 작업을 나눴다. 모델이 없을 때는 Mock 모드로 돌게 했다.", result: "첫날 문서 21종과 기본 코드를 올려 바로 개발을 시작했고, 팀 저장소에 PR 48건을 병합했다. PR마다 GitHub Actions로 테스트·빌드를 검사한다." },
+    ],
     stats: [
       { value: "9", label: { ko: "분류 클래스", en: "classification classes" } },
       { value: "48", label: { ko: "병합한 PR", en: "pull requests merged" } },
