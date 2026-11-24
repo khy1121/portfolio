@@ -22,7 +22,7 @@ const SKILLS: { group: string; items: string[] }[] = [
 ];
 
 function H2({ children }: { children: ReactNode }) {
-  return <h2 className="mb-2.5 mt-5 text-[18px] font-bold italic tracking-tight first:mt-0">{children}</h2>;
+  return <h2 className="mb-2 mt-4 text-[18px] font-bold italic tracking-tight first:mt-0">{children}</h2>;
 }
 
 function Dots({ items, className = "" }: { items: ReactNode[]; className?: string }) {
@@ -44,7 +44,7 @@ function Label({ children }: { children: ReactNode }) {
 function ProjectBlock({ p }: { p: Project }) {
   const c = p.cases[0];
   return (
-    <article className="grid grid-cols-[9.5rem_1fr] gap-5 border-t py-3 first:border-t-0 first:pt-0" style={{ borderColor: C.line }}>
+    <article className="grid grid-cols-[9.5rem_1fr] gap-5 border-t py-2 first:border-t-0 first:pt-0 break-inside-avoid" style={{ borderColor: C.line }}>
       <div className="text-[11px]">
         <p className="text-[14px] font-bold">{p.title}</p>
         <p className="mt-1 leading-[1.5]" style={{ color: C.sub }}>
@@ -68,6 +68,11 @@ function ProjectBlock({ p }: { p: Project }) {
             상세
           </a>
         </p>
+        {p.preview && (
+          // 실제 화면 한 장. 정지 프레임(poster)이라 인쇄에서도 그대로 나온다
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={p.preview.poster} alt={`${p.title} 화면`} className="mt-3 w-[19mm] rounded-[6px] border" style={{ borderColor: C.line }} />
+        )}
       </div>
       <div className="min-w-0 text-[11px]">
         <p className="border-l-[3px] pl-2.5 text-[12px] font-semibold leading-[1.5]" style={{ borderColor: C.ink }}>
@@ -108,7 +113,8 @@ function ProjectBlock({ p }: { p: Project }) {
 
 export default function SubmitResumePage() {
   const featured = projects.filter((p) => p.featured);
-  const others = projects.filter((p) => !p.featured);
+  // 교수 상담예약은 전체 리팩토링 예정이라 제출용에서는 뺀다
+  const others = projects.filter((p) => !p.featured && p.slug !== "omfres");
   const exp = resume.experience.filter((e) => !e.org.startsWith("Cropy"));
 
   return (
@@ -199,7 +205,7 @@ export default function SubmitResumePage() {
           </div>
 
           <H2>Experience.</H2>
-          <div className="space-y-3 text-[11px]">
+          <div className="space-y-2 text-[11px]">
             {exp.map((e) => (
               <div key={e.org} className="grid grid-cols-[9.5rem_1fr] gap-5">
                 <div>
@@ -210,7 +216,7 @@ export default function SubmitResumePage() {
                 </div>
                 <div>
                   <p className="font-semibold">{e.title}</p>
-                  <Dots className="mt-1" items={e.bullets.slice(0, 2)} />
+                  <Dots className="mt-1" items={e.bullets.slice(0, 1)} />
                 </div>
               </div>
             ))}
