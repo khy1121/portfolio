@@ -153,8 +153,8 @@ export const projects: Project[] = [
     preview: { src: "/previews/cropy.webp", poster: "/previews/cropy-poster.webp", note: "배포 사이트 녹화 · 인터넷 없이 기기에서 진단" },
     title: "Cropy",
     kind: "농작물 병해충 AI 진단",
-    period: "2026.09 –",
-    status: "진행 중",
+    period: "2026.07 – 11",
+    status: "종료",
     team: "산학협력 팀 5인",
     role: { ko: "산학협력 팀 5인 · 팀장 · 기획·디자인·백엔드·모델", en: "Industry-academic team of 5 · lead · planning, design, backend and model" },
     summary: {
@@ -191,7 +191,7 @@ export const projects: Project[] = [
     title: "MCM Boarding Pass",
     kind: "패션 브랜드 매장 체험 웹",
     shot: "/shots/boardingpass.webp",
-    period: "2026.08",
+    period: "2026.07 – 08",
     status: "종료",
     team: "해커톤 팀 6인",
     role: { ko: "해커톤 팀 6인 · 프론트엔드 총괄(FE 2인) · 커밋 79%", en: "Hackathon team of 6 · frontend lead (2 FE) · 79% of commits" },
@@ -394,7 +394,7 @@ export const resume = {
     {
       org: "Cropy 산학협력 프로젝트",
       title: "팀장 · 기획·디자인·백엔드·모델",
-      period: "2026.09 – 진행 중",
+      period: "2026.07 – 2026.11",
       bullets: [
         "팀 5인. 첫날 문서 21종과 백엔드·프론트·ML 기본 코드를 올려 팀이 바로 개발을 시작하게 함",
         "주차별 스프린트와 GitHub 이슈로 작업을 나누고, 팀 저장소에 PR 73건 병합 (팀 전체 132건)",
