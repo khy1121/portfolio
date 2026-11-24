@@ -172,15 +172,15 @@ export const projects: Project[] = [
     cases: [
       { title: "통신이 끊긴 농지에서의 진단", problem: "농지는 통신이 자주 끊겨, 서버 진단에만 의존하면 현장에서 쓸 수 없었다.", solution: "ONNX Runtime Web·Service Worker·IndexedDB로 브라우저 안에서 진단하고 기록을 저장한다. 저장이 실패하면 같은 사진으로 다시 시도할 수 있게 했다.", result: "다시 연결되면 기기 기록을 서버와 동기화한다. 이력 화면에는 필터·빈 상태·재조회를 추가했다." },
       { title: "자꾸 헷갈리는 병해 한 쌍", problem: "ResNet50으로 test 정확도 93.1%를 얻었지만, 오분류 44건 중 26건(59%)이 무 검은무늬병 ↔ 무 노균병 한 쌍에 몰렸다.", solution: "두 후보의 신뢰도가 비슷하면 하나로 단정하지 않고, 구분에 필요한 부위를 다시 찍게 안내해 두 결과를 합쳐 확정하는 흐름을 설계했다.", result: "이 쌍만 구분하는 분류기도 실험했지만 나은 점이 없어 채택하지 않았고, 결과를 모델 문서에 남겼다." },
-      { title: "동급생 팀원에게 일 나누기", problem: "동급생에게 지시가 부담스러워 각자 할 일을 정해 오라 했더니 '뭘 할지 모르겠다'는 답이 돌아왔다.", solution: "자율은 배려가 아니라 팀장 일을 미룬 것이라고 판단하고, 주차별 스프린트와 GitHub 이슈로 작업을 나눴다. 모델이 없을 때는 Mock 모드로 돌게 했다.", result: "첫날 문서 21종과 기본 코드를 올려 바로 개발을 시작했고, 팀 저장소에 PR 48건을 병합했다. PR마다 GitHub Actions로 테스트·빌드를 검사한다." },
+      { title: "동급생 팀원에게 일 나누기", problem: "동급생에게 지시가 부담스러워 각자 할 일을 정해 오라 했더니 '뭘 할지 모르겠다'는 답이 돌아왔다.", solution: "자율은 배려가 아니라 팀장 일을 미룬 것이라고 판단하고, 주차별 스프린트와 GitHub 이슈로 작업을 나눴다. 모델이 없을 때는 Mock 모드로 돌게 했다.", result: "첫날 문서 21종과 기본 코드를 올려 바로 개발을 시작했고, 팀 저장소에 PR 73건을 병합했다(팀 전체 132건). PR마다 GitHub Actions로 테스트·빌드를 검사한다." },
     ],
     resumeLines: ["통신이 끊긴 농지에서도 브라우저에서 진단(ONNX Runtime Web·Service Worker·IndexedDB), 오분류의 59%가 몰린 병해 한 쌍은 재촬영 후 합산 판정"],
     stats: [
       { value: "9", label: { ko: "분류 클래스", en: "classification classes" } },
-      { value: "48", label: { ko: "병합한 PR", en: "pull requests merged" } },
+      { value: "73", label: { ko: "병합한 PR · 팀 전체 132", en: "pull requests merged · 132 team-wide" } },
     ],
     stack: ["Next.js 15", "FastAPI", "PyTorch"],
-    repo: "https://github.com/khy1121/Cropy",
+    repo: "https://github.com/hs-cropy/Cropy",
     demo: "https://43.202.14.204.sslip.io/",
     accent: "#9CD36A",
   },
@@ -194,7 +194,7 @@ export const projects: Project[] = [
     period: "2026.08",
     status: "종료",
     team: "해커톤 팀 6인",
-    role: { ko: "해커톤 팀 6인 · 프론트엔드 총괄(FE 2인) · 커밋 75%", en: "Hackathon team of 6 · frontend lead (2 FE) · 75% of commits" },
+    role: { ko: "해커톤 팀 6인 · 프론트엔드 총괄(FE 2인) · 커밋 79%", en: "Hackathon team of 6 · frontend lead (2 FE) · 79% of commits" },
     summary: {
       ko: "매장 방문을 비행에 비유한 모바일 웹. 회원가입(여권) → 설문 → AI 추천 동선 → 3D 여권 스탬프",
       en: "Mobile web that frames a store visit as a flight: passport sign-up, survey, AI route, 3D passport stamp",
@@ -221,6 +221,41 @@ export const projects: Project[] = [
     repo: "https://github.com/Hsu-Likelion-14th-Hackathon/FE",
     demo: "https://boardingpass-seven.vercel.app",
     accent: "#F28C6B",
+  },
+  {
+    slug: "timebank",
+    preview: { src: "/previews/timebank.png", poster: "/previews/timebank.png", note: "Figma 시안 · 홈 화면 (개발 중)" },
+    title: "할 일 이자",
+    kind: "미루면 이자가 붙는 할 일 앱",
+    period: "2026.11 –",
+    status: "진행 중",
+    team: "개인",
+    role: { ko: "개인 · 기획·디자인·개발", en: "Solo · planning, design and development" },
+    summary: {
+      ko: "기한을 넘기면 하루 10% 복리 이자가 붙어, 미룬 비용을 '빚'이라는 숫자로 보여 주는 할 일 앱",
+      en: "A to-do app where overdue tasks accrue 10% daily compound interest, showing the cost of procrastination as debt",
+    },
+    problem: {
+      ko: "투두 앱의 '기한 지남' 표시는 익숙해지면 무시하게 되고, 미룬 기간이 비용으로 쌓이는 것은 보이지 않는다.",
+      en: "Overdue badges in to-do apps get ignored, and the growing cost of putting things off stays invisible.",
+    },
+    result: {
+      ko: "할 일마다 원금(중요도 × 1,000냥)을 걸고 기한을 넘기면 하루 10% 복리로 불린다(상한 10배). 기기 우선 저장과 수정 시각 기준 동기화로 오프라인 입력을 보존하고, 친구 그룹 인증·주간 순위·상점을 붙였다.",
+      en: "Each task stakes a principal that compounds 10% a day once overdue (capped at 10×). Local-first saves with last-write-wins sync keep offline input, plus friend groups, weekly standings and a shop.",
+    },
+    cases: [
+      { title: "저장이 실패해도 입력을 잃지 않기", problem: "등록하는 순간 네트워크가 끊기면 입력이 사라지고, 두 기기에서 같은 할 일을 고치면 어느 쪽이 맞는지 알 수 없었다.", solution: "기기에 먼저 저장한 뒤 서버와 동기화하고, 같은 행은 수정 시각이 늦은 쪽을 따르게 했다. 삭제도 시각을 남기는 방식으로 바꿔 다른 기기가 삭제 사실을 받아 가게 했다.", result: "서버 요청을 막은 채 할 일을 등록해도 기기에 남고, 연결되자 8초 뒤 서버에 올라가는 것을 확인했다. 휴대폰 비행기 모드 확인은 남아 있다." },
+      { title: "친구와 엮여도 남의 기록은 보이지 않게", problem: "친구 그룹·순위·인증 사진처럼 다른 사람과 엮이는 기능이 늘면서, 정책 하나만 빠져도 남의 기록이 보일 수 있었다.", solution: "테이블마다 RLS 정책을 두고, 임시 사용자 2명으로 B가 A의 할 일·상환·구매·그룹 등 9개 테이블을 조회·수정·삭제하고 A 이름으로 추가해 보는 점검을 했다.", result: "조회·수정·삭제는 모두 0건, 대신 추가는 거부되는 것을 확인하고 되돌렸다. 웹 번들에 비밀 키가 없고 공개 키만 있는 것도 확인했다." },
+      { title: "시간대가 달라도 같은 빚", problem: "하루 단위 복리라 날짜 경계가 어긋나면 기기마다 빚이 다르게 보일 수 있었다.", solution: "이자 계산을 화면과 분리된 순수 함수로 두고, 0일·1일·상한에 닿는 25일째와 그 뒤를 단위 테스트로 고정했다.", result: "한국 시간(로컬)과 UTC(CI) 양쪽에서 같은 결과로 통과한다. 단위 테스트는 196개다." },
+    ],
+    resumeLines: ["미루면 하루 10% 복리가 붙는 할 일 앱을 요구사항 68개·추적표부터 설계하고, 기기 우선 저장과 수정 시각 기준 동기화로 오프라인 입력을 보존 (진행 중)"],
+    stats: [
+      { value: "278", label: { ko: "커밋 · 시작 2일", en: "commits in the first 2 days" } },
+      { value: "196", label: { ko: "단위 테스트", en: "unit tests" } },
+    ],
+    stack: ["Expo", "React Native", "TypeScript", "Supabase"],
+    repo: "https://github.com/khy1121/Timebank",
+    accent: "#F2A33A",
   },
   {
     slug: "omfres",
@@ -362,7 +397,7 @@ export const resume = {
       period: "2026.09 – 진행 중",
       bullets: [
         "팀 5인. 첫날 문서 21종과 백엔드·프론트·ML 기본 코드를 올려 팀이 바로 개발을 시작하게 함",
-        "주차별 스프린트와 GitHub 이슈로 작업을 나누고, 팀 저장소에 PR 48건 병합",
+        "주차별 스프린트와 GitHub 이슈로 작업을 나누고, 팀 저장소에 PR 73건 병합 (팀 전체 132건)",
         "통신이 끊겨도 브라우저에서 진단·저장하는 오프라인 기능 구현 (ONNX Runtime Web)",
       ],
     },

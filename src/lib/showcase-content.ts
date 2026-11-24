@@ -8,7 +8,7 @@ export const ticker: { value: string; label: L }[] = [
   { value: "368", label: { ko: "팀 CI 테스트 · 26.08.20", en: "team CI tests · 26-08-20" } },
   { value: "99.8%", label: { ko: "NADOK 배너 용량 감소", en: "NADOK banner size cut" } },
   { value: "6", label: { ko: "Overlap으로 확정한 회의", en: "meetings settled with Overlap" } },
-  { value: "48", label: { ko: "Cropy 병합 PR", en: "Cropy pull requests merged" } },
+  { value: "73", label: { ko: "Cropy 병합 PR", en: "Cropy pull requests merged" } },
 ];
 
 export const profile = {
@@ -24,7 +24,7 @@ export const profile = {
   looking: "인턴 · 전환형 인턴 · 신입",
   certs: ["정보처리기사 필기 합격", "SQLD"],
   highlights: [
-    { k: "소개하는 프로젝트", v: "6개" },
+    { k: "소개하는 프로젝트", v: "7개" },
     { k: "상담 예약 사용자", v: "교수 3 · 학생 22" },
     { k: "예약 중복 요청 응답", v: "HTTP 409" },
     { k: "MCM 인증 상태", v: "3가지" },
